@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="main">
+    <file>logoSRG.png</file>
+    <file>nuts.png</file>
+    <file>logoAlcalaHoriz.png</file>
+    <file>logoAlcalaVert.png</file>
+  </qresource>
+</RCC>

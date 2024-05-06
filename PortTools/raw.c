@@ -18,11 +18,13 @@
 #include "rawSpWusb.h"			/* ReadRawSpWusb, WriteRawSpWusb, ... */
 #include "rawSpWpci.h"			/* ReadRawSpWpci, WriteRawSpWpci, ... */
 #include "rawSerial.h"			/* ReadRawSerial, WriteRawSerial, ... */
-#include "rawSocket.h"			/* ReadRawSocket, WriteRawSocket, ... */
+#include "rawTCPSocket.h"		/* ReadRawTCPSocket, WriteRawTCPSocket, ... */
+#include "rawUDPSocket.h"		/* ReadRawUDPSocket, WriteRawUDPSocket, ... */
 #include "raw.h"			/* SingleTickIn */
 #include "rawProtocol.h"		/* readProtocolPacketsBuffer */
-#include "configSpW.h"			/* timeout */
-#include "configSocket.h"			/* timeout */
+#include "configSpW.h"			
+#include "configTCPSocket.h"            /* AcceptTCPSocketServer */
+#include "configUDPSocket.h"            /* AcceptUDPSocketServer */			
 #include "../definitions.h"		/* MAX_PACKET_SIZE */
 #include "../CommonTools/GetSetFieldTools.h"
 
@@ -58,9 +60,14 @@ int ReadRaw(unsigned char * packet, unsigned int * pLength, portConfig * pPort)
             status = ReadRawSerial(packet, pLength, &pPort->ptcl);
             break;
             
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
-            status = ReadRawSocket(packet, pLength,
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
+            status = ReadRawTCPSocket(packet, pLength,
                     &pPort->config.socket.socketHdl, &pPort->ptcl);
+            break;
+            
+        case UDP_SOCKET_PORT:
+            status = ReadRawUDPSocket(packet, pLength,
+                    &pPort->config.socket.socketHdl);
             break;
 
         default:
@@ -93,8 +100,15 @@ int WriteRaw(const unsigned char * packet, int length, portConfig * pPort)
             status = WriteRawSerial(packet, length, pPort->config.uart.portNum);
             break;
             
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
-            status = WriteRawSocket(packet, length, pPort->config.socket.socketHdl);
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
+            status = WriteRawTCPSocket(packet, length,
+                    pPort->config.socket.socketHdl);
+            break;
+            
+        case UDP_SOCKET_PORT:
+            status = WriteRawUDPSocket(packet, length,
+                    pPort->config.socket.socketHdl,
+                    pPort->config.socket.remoteAddr);
             break;
 
         case SPW_TC_PORT:
@@ -181,8 +195,12 @@ void RawRWError(int status, char * msg, int msgSize, portConfig * pPort)
             status = 0;
             break;
             
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
-            RawSocketRWError(status, msg, msgSize);
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
+            RawTCPSocketRWError(status, msg, msgSize);
+            break;
+            
+        case UDP_SOCKET_PORT:
+            RawUDPSocketRWError(status, msg, msgSize);
             break;
 
         default:
@@ -386,8 +404,8 @@ int PrepareServer(portConfig * pPort, unsigned int portIdx, int * pRetry)
     int status = 0;
     switch(pPort->portType)
     {
-        case SOCKET_SRV_PORT:
-            status = AcceptSocketServer(&pPort->config.socket.address,
+        case TCP_SOCKET_SRV_PORT:
+            status = AcceptTCPSocketServer(&pPort->config.socket.localAddr,
                     &pPort->config.socket.socketHdl);
             if(status == 0)
             {
@@ -397,14 +415,13 @@ int PrepareServer(portConfig * pPort, unsigned int portIdx, int * pRetry)
             }
             else
             {
-                if(status == ACCEPT_NOT_POSSIBLE_SERVER_CLOSED)
+                if(status == ACCEPT_NOT_POSSIBLE_TCP_SERVER_CLOSED)
                 {
                     *pRetry = 0;
                     status = 0;
                 }
             }
             break;
-
         default:
             break;
     }
@@ -415,13 +432,14 @@ void DisplayPrepareServerError(int error, char * msg, int msgSize,
         portConfig * pPort, unsigned int portIdx)
 {
     int length = snprintf(msg, MAX_MSG_SIZE,
-            "Error at %s port (%u) while preparing server port %d: ",
-            pPort->name, portIdx, pPort->config.socket.portNum);
+            "Error at %s port (%u:%s) while preparing server port %u: ",
+            pPort->name, portIdx, pPort->config.socket.localIp,
+            pPort->config.socket.localPort);
 
     switch(pPort->portType)
     {
-        case SOCKET_SRV_PORT:
-            DisplaySocketError(error, &msg[length], msgSize-length);
+        case TCP_SOCKET_SRV_PORT:
+            DisplayTCPSocketError(error, &msg[length], msgSize-length);
             break;
 
         default:
@@ -433,13 +451,13 @@ void UnprepareServer(portConfig * pPort, unsigned int portIdx)
 {
     switch(pPort->portType)
     {
-        case SOCKET_SRV_PORT:
+        case TCP_SOCKET_SRV_PORT:
             pthread_mutex_lock(&ptclMutex[portIdx]);
             pPort->ptcl.portConnected = 0;
-            CloseSocket(NULL);
+            CloseTCPSocket(NULL);
             pthread_mutex_unlock(&ptclMutex[portIdx]);
             break;
-
+            
         default:
             break;
     }

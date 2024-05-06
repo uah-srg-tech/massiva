@@ -1,5 +1,5 @@
 /**
- * \file	configSocket.c
+ * \file	configTCPSocket.c
  * \brief	
  *	
  * \author	Aaron Montalvo, <aaron.montalvo@uah.es>
@@ -27,7 +27,7 @@
 #endif
 #include <errno.h>
 #include <stdio.h>					/* sprintf, snprintf */
-#include "configSocket.h"
+#include "configTCPSocket.h"
 
 static int errorNumber = 0;
 static int server_fd = -1;
@@ -40,13 +40,41 @@ enum {
     ACCEPT_ERROR = -5,
     INET_PTON_WRONG_ADDRESS = -6,
     INET_PTON_ERROR = -7,
-    CONNECT_ERROR = -8,
-    WSASTARTUP_ERROR = -9,
+    WSASTARTUP_ERROR = -8,
+    CONNECT_ERROR = -9,
     SELECT_ERROR = -10
 };
 
-int ConfigureSocketServer(unsigned int portNum, struct sockaddr_in * pAddress)
+int ConfigureAddr(const char ipAddress[16], unsigned int port,
+        struct sockaddr_in * pAddress)
 {
+    int status = 0;
+    pAddress->sin_family = AF_INET; 
+    pAddress->sin_port = htons(port);
+    // Convert IPv4 and IPv6 addresses from text to binary form 
+    if((status=inet_pton(AF_INET, ipAddress, &pAddress->sin_addr)) != 1)
+    {
+        if(status == 0)
+        {
+            return INET_PTON_WRONG_ADDRESS;
+        }
+        else
+        {
+#if(defined _WIN32 || __CYGWIN__)
+            errorNumber = WSAGetLastError();
+#elif(defined __linux__)
+            errorNumber = errno;
+#endif
+            return INET_PTON_ERROR;
+        }
+    }
+    return 0;
+}
+
+int ConfigureTCPSocketServer(const char localIp[16], unsigned int localPort,
+		struct sockaddr_in * pLocalAddr)
+{
+    int status = 0;
     if(server_fd == -1)
     {
         /* configure server socket if not configured */
@@ -85,11 +113,12 @@ int ConfigureSocketServer(unsigned int portNum, struct sockaddr_in * pAddress)
         }
     }
     
-    (*pAddress).sin_family = AF_INET; 
-    (*pAddress).sin_addr.s_addr = INADDR_ANY; 
-    (*pAddress).sin_port = htons(portNum);
+    status = ConfigureAddr(localIp, localPort, pLocalAddr);
+    if(status < 0)
+        //pLocalAddr->sin_addr.s_addr = INADDR_ANY;
+        return status;
     
-    if(bind(server_fd, (struct sockaddr *)pAddress, sizeof(*pAddress)) != 0) 
+    if(bind(server_fd, (struct sockaddr *)pLocalAddr, sizeof(*pLocalAddr)) != 0) 
     {
 #if(defined _WIN32 || __CYGWIN__)
         errorNumber = WSAGetLastError();
@@ -112,13 +141,13 @@ int ConfigureSocketServer(unsigned int portNum, struct sockaddr_in * pAddress)
     return 0;
 }
 
-int AcceptSocketServer(struct sockaddr_in * pAddress, int * pAcceptedSocket)
+int AcceptTCPSocketServer(struct sockaddr_in * pLocalAddr, int * pAcceptedSocket)
 {    
     fd_set readSet;
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 50000;
-    int addrlen = sizeof(*pAddress); 
+    int addrlen = sizeof(*pLocalAddr); 
     
     while((server_fd != -1) && (*pAcceptedSocket == -1))
     {
@@ -136,7 +165,7 @@ int AcceptSocketServer(struct sockaddr_in * pAddress, int * pAcceptedSocket)
 #endif
                 return SELECT_ERROR;
             }
-            if((*pAcceptedSocket = accept(server_fd, (struct sockaddr *)pAddress,
+            if((*pAcceptedSocket = accept(server_fd, (struct sockaddr *)pLocalAddr,
                     (socklen_t*)&addrlen)) < 0) 
             {
 #if(defined _WIN32 || __CYGWIN__)
@@ -157,13 +186,13 @@ int AcceptSocketServer(struct sockaddr_in * pAddress, int * pAcceptedSocket)
     }
     
     if(server_fd == -1)
-        return ACCEPT_NOT_POSSIBLE_SERVER_CLOSED;
+        return ACCEPT_NOT_POSSIBLE_TCP_SERVER_CLOSED;
     else
         return 0;
 }
 
-int ConfigureSocketClient(unsigned int portNum, const char ipAddress[16],
-        int * pConnectedSocket)
+int ConfigureTCPSocketClient(const char remoteIp[16], unsigned int remotePort,
+		int * pConnectedSocket)
 {
     struct sockaddr_in address;
     int status = 0;
@@ -179,29 +208,14 @@ int ConfigureSocketClient(unsigned int portNum, const char ipAddress[16],
     {
         errorNumber = errno;
         return CREATE_SOCKET_ERROR;
-    } 
-    address.sin_family = AF_INET; 
-    address.sin_port = htons(portNum);
+    }
+    status = ConfigureAddr(remoteIp, remotePort, &address);
+    if(status < 0)
+        //address.sin_addr.s_addr = INADDR_ANY;
+        return status;
     
-    // Convert IPv4 and IPv6 addresses from text to binary form 
-    if((status=inet_pton(AF_INET, ipAddress, &address.sin_addr)) != 1)
-    {
-        if(status == 0)
-        {
-            return INET_PTON_WRONG_ADDRESS;
-        }
-        else
-        {
-#if(defined _WIN32 || __CYGWIN__)
-            errorNumber = WSAGetLastError();
-#elif(defined __linux__)
-            errorNumber = errno;
-#endif
-            return INET_PTON_ERROR;
-        }
-    }    
-    
-    if(connect(*pConnectedSocket, (struct sockaddr *)&address, sizeof(address)) != 0)
+    if(connect(*pConnectedSocket, (struct sockaddr *)&address, sizeof(address))
+            != 0)
     {
 #if(defined _WIN32 || __CYGWIN__)
         errorNumber = WSAGetLastError();
@@ -210,7 +224,7 @@ int ConfigureSocketClient(unsigned int portNum, const char ipAddress[16],
 #endif
         return CONNECT_ERROR; 
     }
-    /* enable non-blocking socket */
+    /* enable TCP non-blocking socket */
     u_long mode = 1;
 #if(defined _WIN32 || __CYGWIN__)
     ioctlsocket(*pConnectedSocket, FIONBIO, &mode);
@@ -220,7 +234,7 @@ int ConfigureSocketClient(unsigned int portNum, const char ipAddress[16],
     return 0; 
 }
 
-void DisplaySocketError(int error, char * msg, int msgSize)
+void DisplayTCPSocketError(int error, char * msg, int msgSize)
 {
     unsigned int msgLen = 0;
     
@@ -304,7 +318,7 @@ void DisplaySocketError(int error, char * msg, int msgSize)
     }
 }
 
-int CloseSocket(int * pConnectedSocket)
+int CloseTCPSocket(int * pConnectedSocket)
 {
     if(pConnectedSocket == NULL)
     {

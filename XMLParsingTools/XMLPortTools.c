@@ -60,6 +60,12 @@ static int ParseSpWPort (const char * portConfigFile, const char * relativePath,
  */
 static int ParseSpWAuxPort (const char * portConfigFile, const char * relativePath,
         portConfig * ports, unsigned int portIndex);
+
+static int ParseTCPSocketPort (const char * portConfigFile,
+        const char * relativePath, portConfig * pPort, unsigned int portIndex);
+		
+static int ParseUDPSocketPort (const char * portConfigFile,
+        const char * relativePath, portConfig * pPort, unsigned int portIndex);
 /**
  * \brief Function to parse the file where XML serial port is defined
  * \param	portConfigFile	File where the XML serial port is defined
@@ -68,9 +74,6 @@ static int ParseSpWAuxPort (const char * portConfigFile, const char * relativePa
  */
 static int ParseSerialPort (const char * portConfigFile, const char * relativePath,
         portConfig * pPort, serialConfig * pSerial, unsigned int portIndex);
-
-static int ParseSocketPort (const char * portConfigFile, const char * relativePath,
-        portConfig * pPort, unsigned int portIndex);
 
 int ParsePort(char * portConfigFile, portConfig * ports, serialConfig * serials,
         int index, const char * relativePath)
@@ -104,8 +107,16 @@ int ParsePort(char * portConfigFile, portConfig * ports, serialConfig * serials,
             }
             break;
 
-        case SOCKET_CLI_PORT: case SOCKET_SRV_PORT:
-            if((status = ParseSocketPort(portConfigFile, relativePath,
+        case TCP_SOCKET_CLI_PORT: case TCP_SOCKET_SRV_PORT:
+            if((status = ParseTCPSocketPort(portConfigFile, relativePath,
+                    &ports[index], index)) != 0)
+            {
+                return status;
+            }
+            break;
+
+        case UDP_SOCKET_PORT:
+            if((status = ParseUDPSocketPort(portConfigFile, relativePath,
                     &ports[index], index)) != 0)
             {
                 return status;
@@ -144,6 +155,16 @@ void DisplayParsePortError (int status, portConfig * pPort, char * msg,
 
         case UART_PORT:
             len = snprintf(msg, maxMsgSize, "Error while parsing serial "
+                    "port file \"%s\": ", portFileError);
+            break;
+
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
+            len = snprintf(msg, maxMsgSize, "Error while parsing TCP socket "
+                    "port file \"%s\": ", portFileError);
+            break;
+
+        case UDP_SOCKET_PORT:
+            len = snprintf(msg, maxMsgSize, "Error while parsing UDP socket "
                     "port file \"%s\": ", portFileError);
             break;
 
@@ -200,7 +221,7 @@ void DisplayParsePortError (int status, portConfig * pPort, char * msg,
             
         case WRONG_SOCKET_ROLE:
             snprintf(&msg[len], maxMsgSize-len, "Selected socket (id %d) file"
-                    " was defined both as client and as server", deviceError);
+                    " was not defined correctly as client or as server", deviceError);
             break;
             
         case WRONG_SYNC_PATTERN_LEN:
@@ -596,9 +617,8 @@ static int ParseSerialPort (const char * portConfigFile, const char * relativePa
     return status;
 }
 
-
-static int ParseSocketPort (const char * portConfigFile, const char * relativePath,
-        portConfig * pPort, unsigned int portIndex)
+static int ParseTCPSocketPort (const char * portConfigFile,
+        const char * relativePath, portConfig * pPort, unsigned int portIndex)
 {
     unsigned int numberOfChildren;
     char attrData[ATTR_PORT_SIZE];
@@ -638,8 +658,8 @@ static int ParseSocketPort (const char * portConfigFile, const char * relativePa
         return status;
     }
     /* check if port file is socketCliPort or socketSvrPort */
-    if((strncmp((char*)child->name, "socketCliPort", 13)) &&
-            (strncmp((char*)child->name, "socketSrvPort", 13)) &&
+    if((strncmp((char*)child->name, "TCPsocketCliPort", 16)) &&
+            (strncmp((char*)child->name, "TCPsocketSrvPort", 16)) &&
             (strncmp((char*)child->name, "portConfig", 10)))
     {
         deviceError = portIndex;
@@ -647,52 +667,156 @@ static int ParseSocketPort (const char * portConfigFile, const char * relativePa
     }
     if(strncmp((char*)child->name, "portConfig", 10) == 0)
     {
-        if((status = GetXMLAttributeValueByName(child, "type", attrData, ATTR_PORT_SIZE)) != 0)
+        if((status = GetXMLAttributeValueByName(child, "type",
+                attrData, ATTR_PORT_SIZE)) != 0)
             return status;
         
-        if(((strncmp(attrData, "gss:GSSIfaceSocketCliPort", 21)) &&
-            (pPort->portType == SOCKET_CLI_PORT)) ||
-            ((strncmp(attrData, "gss:GSSIfaceSocketSrvPort", 21)) &&
-            (pPort->portType == SOCKET_SRV_PORT)))
+        if(((strncmp(attrData, "gss:GSSIfaceTCPSocketCliPort", 24)) &&
+            (pPort->portType == TCP_SOCKET_CLI_PORT)) ||
+            ((strncmp(attrData, "gss:GSSIfaceTCPSocketSrvPort", 24)) &&
+            (pPort->portType == TCP_SOCKET_SRV_PORT)))
         {
             deviceError = portIndex;
             return WRONG_SOCKET_ROLE;
         }
     }
-    else if(((strncmp((char*)child->name, "socketCliPort", 13)) &&
-            (pPort->portType == SOCKET_CLI_PORT)) ||
-            ((strncmp((char*)child->name, "socketSrvPort", 13)) &&
-            (pPort->portType == SOCKET_SRV_PORT)))
+    else if(((strncmp((char*)child->name, "TCPsocketCliPort", 16)) &&
+            (pPort->portType == TCP_SOCKET_CLI_PORT)) ||
+            ((strncmp((char*)child->name, "TCPsocketSrvPort", 16)) &&
+            (pPort->portType == TCP_SOCKET_SRV_PORT)))
     {
         deviceError = portIndex;
         return WRONG_SOCKET_ROLE;
     }
     
-    /* get port number */ 
-    if((status = GetXMLAttributeValueByName(child, "portNumber", attrData, ATTR_PORT_SIZE)) != 0)
+    memset(pPort->config.socket.localIp, 0, 16);
+    memset(pPort->config.socket.remoteIp, 0, 16);
+    /* server: get local address & port number */
+    if(pPort->portType == TCP_SOCKET_SRV_PORT)
     {
-        return status;
-    }
-    pPort->config.socket.portNum = (int)strtol (attrData, NULL, 0);
-
-    /* get ip address (only for client) */ 
-    memset(pPort->config.socket.ipAddress, 0, 16);
-    if(strncmp((char*)child->name, "socketCliPort", 13) == 0)
-    {
-        if((status = GetXMLAttributeValueByName(child, "ipAddress", attrData, ATTR_PORT_SIZE)) != 0)
+        if((status = GetXMLAttributeValueByName(child, "localIp",
+                attrData, ATTR_PORT_SIZE)) != 0)
         {
             return status;
         }
-        snprintf(pPort->config.socket.ipAddress, 16, "%s", attrData);
+        snprintf(pPort->config.socket.localIp, 16, "%s", attrData);
+        if((status = GetXMLAttributeValueByName(child, "localPort",
+                attrData, ATTR_PORT_SIZE)) != 0)
+        {
+            return status;
+        }
+        pPort->config.socket.localPort = (int)strtol (attrData, NULL, 0);
+    }
+    /* client: get remote address & port number */
+    else if(pPort->portType == TCP_SOCKET_CLI_PORT)
+    {
+        if((status = GetXMLAttributeValueByName(child, "remoteIp",
+                attrData, ATTR_PORT_SIZE)) != 0)
+        {
+            return status;
+        }
+        snprintf(pPort->config.socket.remoteIp, 16, "%s", attrData);
+        if((status = GetXMLAttributeValueByName(child, "remotePort",
+                attrData, ATTR_PORT_SIZE)) != 0)
+        {
+            return status;
+        }
+        pPort->config.socket.remotePort = (int)strtol (attrData, NULL, 0);
     }
     
-    /* get port protocol handle */ 
+    /* get port protocol handle */
     if((status = GetXMLChildElementByIndex (child, 0, &greatchild)) != 0)
     {
         return status;
     }
     status = ParsePortProtocol(greatchild, attrData, &pPort->ptcl, 
             &pPort->portPhyHeaderOffsetTC, &pPort->portPhyHeaderOffsetTM);
+			
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+    
+    pPort->config.socket.socketHdl = -1;
+    return status;
+}
+
+static int ParseUDPSocketPort (const char * portConfigFile,
+        const char * relativePath, portConfig * pPort, unsigned int portIndex)
+{
+    unsigned int numberOfChildren;
+    char attrData[ATTR_PORT_SIZE];
+    int status;
+    xmlDocPtr doc = NULL;
+    xmlNodePtr root = NULL, child = NULL;
+    char fullPath[MAX_STR_LEN];
+	
+    /* look for file */
+    if(fileExists(portConfigFile, relativePath, fullPath, MAX_STR_LEN) == NULL)
+    {
+    	strncpy(portFileError, portConfigFile, 65);
+        return PORT_FILE_NOT_FOUND;
+    }
+    /* Open Document */
+    doc = xmlParseFile(fullPath);
+    if (doc == NULL)
+    {
+        return PORT_FILE_PARSING_ERROR;
+    }
+    root = xmlDocGetRootElement(doc);
+    if (root == NULL)
+    {
+        return PORT_FILE_PARSING_ERROR;
+    }
+    /* NOTE: "name" is not used */
+
+    GetXMLNumChildren(root, &numberOfChildren);
+    if(numberOfChildren != 1)
+    {
+        return ONE_PORT_PER_FILE;
+    }
+
+    /* get xml format file */ 
+    if((status = GetXMLChildElementByIndex (root, 0, &child)) != 0)
+    {
+        return status;
+    }
+    /* check if port file is UDPsocketPort */
+    if((strncmp((char*)child->name, "UDPsocketPort", 13)) &&
+            (strncmp((char*)child->name, "portConfig", 10)))
+    {
+        deviceError = portIndex;
+        return WRONG_PORT_SOCKET;
+    }
+	
+    /* get local address & port number */
+    memset(pPort->config.socket.localIp, 0, 16);
+    if((status = GetXMLAttributeValueByName(child, "localIp",
+            attrData, ATTR_PORT_SIZE)) != 0)
+    {
+        return status;
+    }
+    snprintf(pPort->config.socket.localIp, 16, "%s", attrData);
+    if((status = GetXMLAttributeValueByName(child, "localPort",
+            attrData, ATTR_PORT_SIZE)) != 0)
+    {
+        return status;
+    }
+    pPort->config.socket.localPort = (int)strtol (attrData, NULL, 0);
+	
+    /* get remote address & port number */ 
+    memset(pPort->config.socket.remoteIp, 0, 16);
+    if((status = GetXMLAttributeValueByName(child, "remoteIp",
+            attrData, ATTR_PORT_SIZE)) != 0)
+    {
+            return status;
+    }
+    snprintf(pPort->config.socket.remoteIp, 16, "%s", attrData);
+    if((status = GetXMLAttributeValueByName(child, "remotePort",
+            attrData, ATTR_PORT_SIZE)) != 0)
+    {
+        return status;
+    }
+    pPort->config.socket.remotePort = (int)strtol (attrData, NULL, 0);
+
     xmlFreeDoc(doc);
     xmlCleanupParser();
     

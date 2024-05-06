@@ -1,6 +1,6 @@
 /**
  * \file	rawSocket.c
- * \brief	functions for write and read data in socket port (definition)
+ * \brief	functions for write and read data in TCP socket port (definition)
  *
  * \author	Aaron Montalvo, <aaron.montalvo@uah.es>
  * 
@@ -17,21 +17,22 @@
 #elif(defined __linux__)
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <errno.h>                                      /* errno */
 #include <string.h>                                     /* strerror */
 #endif
 #include <stdio.h>
 #include "rawProtocol.h"
 
-int ReadRawSocket(unsigned char * packet, unsigned int * pLength,
+int ReadRawTCPSocket(unsigned char * packet, unsigned int * pLength,
         int * pSocket, protocolConfig * pPtcl)
 {
     if((*pSocket) == -1)
         return 0;
-    int length = ReadRawProtocol(packet, pLength, pPtcl);
-    return length;
+    int status = ReadRawProtocol(packet, pLength, pPtcl);
+    return status;
 }
 
-int WriteRawSocket(const unsigned char * packet, int length, int socket)
+int WriteRawTCPSocket(const unsigned char * packet, int length, int socket)
 {
     /* first check if socket is still opened */
     if(socket == -1)
@@ -41,16 +42,16 @@ int WriteRawSocket(const unsigned char * packet, int length, int socket)
     return status;
 }
 
-void RawSocketRWError(int error, char * msg, int msgSize)
+void RawTCPSocketRWError(int error, char * msg, int msgSize)
 {
-    int realError = -error;
 #if(defined _WIN32 || __CYGWIN__)
+    error = WSAGetLastError();
     LPVOID lpMsgBuf;
     DWORD dwRC;
 #ifdef UNICODE
     dwRC = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-            FORMAT_MESSAGE_IGNORE_INSERTS, NULL, realError,
+            FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error,
             MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), (LPWSTR) &lpMsgBuf,
             0, NULL);
     if (dwRC && lpMsgBuf)
@@ -58,7 +59,7 @@ void RawSocketRWError(int error, char * msg, int msgSize)
 #else
     dwRC = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
-            FORMAT_MESSAGE_IGNORE_INSERTS, NULL, realError,
+            FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error,
             MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), (LPTSTR) &lpMsgBuf,
             0, NULL);
     if (dwRC && lpMsgBuf)
@@ -66,6 +67,7 @@ void RawSocketRWError(int error, char * msg, int msgSize)
 #endif
     LocalFree(lpMsgBuf);
 #elif(defined __linux__)
-    snprintf(msg, msgSize, "(%d) %s", realError, strerror(realError));
+    error = errno;
+    snprintf(msg, msgSize, "(%d) %s", error, strerror(error));
 #endif
 }

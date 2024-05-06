@@ -17,11 +17,12 @@
 #include "../definitions.h"			/* portConfig, MAX_MSG_SIZE */
 #include "../PortTools/configSpW.h"		/* SelectOpenSpWDevice, ... */
 #include "../PortTools/configSerial.h"		/* ConfigureSerial, ... */
-#include "../PortTools/configSocket.h"		/* ConfigureSocket, ... */
+#include "../PortTools/configTCPSocket.h"	/* ConfigureTCPSocket, ... */
+#include "../PortTools/configUDPSocket.h"	/* ConfigureUDPSocket, ... */
 #include "../PortTools/rawProtocol.h"		/* ptclMutex, ... */
 
 static int portError;
-static int serverConfigured = 0;
+static int TCPserverConfigured = 0;
 
 enum {
     UNKNOWN_PORT = -501,
@@ -96,25 +97,37 @@ int ConfigPort(unsigned int portIndex, portConfig * ports,
             }
             break;
             
-        case SOCKET_SRV_PORT:
-            if ((status = ConfigureSocketServer(pPort->config.socket.portNum,
-                    &pPort->config.socket.address)) != 0)
+        case TCP_SOCKET_SRV_PORT:
+            if ((status = ConfigureTCPSocketServer(pPort->config.socket.localIp,
+                    pPort->config.socket.localPort,
+                    &pPort->config.socket.localAddr)) != 0)
                 return status;
             pthread_mutex_init(&ptclMutex[portIndex], NULL);
             pPort->ptcl.portValid = 1;
-            serverConfigured = 1;
+            TCPserverConfigured = 1;
             break;
         
-        case SOCKET_CLI_PORT:
-            if ((status = ConfigureSocketClient(pPort->config.socket.portNum,
-                    pPort->config.socket.ipAddress,
+        case TCP_SOCKET_CLI_PORT:
+            if ((status = ConfigureTCPSocketClient(pPort->config.socket.remoteIp,
+                    pPort->config.socket.remotePort,
                     &pPort->config.socket.socketHdl)) != 0)
                 return status;
             pthread_mutex_init(&ptclMutex[portIndex], NULL);
             pPort->ptcl.portValid = 1;
             pPort->ptcl.portConnected = 1;
             break;
-
+            
+        case UDP_SOCKET_PORT:
+            if ((status = ConfigureUDPSocket(pPort->config.socket.localIp,
+                    pPort->config.socket.localPort,
+                    &pPort->config.socket.localAddr,
+                    pPort->config.socket.remoteIp,
+                    pPort->config.socket.remotePort,
+                    &pPort->config.socket.remoteAddr,
+                    &pPort->config.socket.socketHdl)) != 0)
+                return status;
+            break;
+        
         case SPW_ERROR_PORT: case DUMMY_PORT:
             break;
 
@@ -153,11 +166,19 @@ void DisplayConfigPortError(int error, portConfig * pPort,
                         msgSize-portInfoMsgSize);
                 break;
 
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
                 portInfoMsgSize = snprintf(msg, msgSize,
-                        "Error while configuring port %d (socket): ",
+                        "Error while configuring port %d (TCP socket): ",
                         portError);
-                DisplaySocketError(error, &msg[portInfoMsgSize],
+                DisplayTCPSocketError(error, &msg[portInfoMsgSize],
+                        msgSize-portInfoMsgSize);
+                break;
+
+        case UDP_SOCKET_PORT:
+                portInfoMsgSize = snprintf(msg, msgSize,
+                        "Error while configuring port %d (UDP socket): ",
+                        portError);
+                DisplayUDPSocketError(error, &msg[portInfoMsgSize],
                         msgSize-portInfoMsgSize);
                 break;
 
@@ -207,12 +228,17 @@ int UnconfigPort(unsigned int portIndex, portConfig * pPort)
             pthread_mutex_unlock(&ptclMutex[portIndex]);
             break;
             
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
             pthread_mutex_lock(&ptclMutex[portIndex]);
             pPort->ptcl.portValid = 0;
             pPort->ptcl.portConnected = 0;
-            status = CloseSocket(&pPort->config.socket.socketHdl);
+            status = CloseTCPSocket(&pPort->config.socket.socketHdl);
             pthread_mutex_unlock(&ptclMutex[portIndex]);
+            break;
+            
+        case UDP_SOCKET_PORT: 
+            pPort->ptcl.portValid = 0;
+            status = CloseUDPSocket(&pPort->config.socket.socketHdl);
             break;
 
         default:
@@ -224,8 +250,8 @@ int UnconfigPort(unsigned int portIndex, portConfig * pPort)
 int UnconfigServer()
 {
     int status = 0;
-    if(serverConfigured)
-        status = CloseSocket(NULL);
+    if(TCPserverConfigured)
+        status = CloseTCPSocket(NULL);
     return status;
 }
 
@@ -248,10 +274,17 @@ void DisplayUnconfigPortError(int status, portConfig * pPort, char * msg,
             DisplaySerialError(status, &msg[msgLen], msgSize-msgLen);
             break;
 
-        case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
+        case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
             msgLen = snprintf(msg, msgSize,
-                    "Error while closing socket port %d: ", portError);
-            DisplaySocketError(status, &msg[msgLen], msgSize-msgLen);
+                    "Error while closing TCP socket port %d: ", portError);
+            DisplayTCPSocketError(status, &msg[msgLen], msgSize-msgLen);
+            break;
+
+
+        case UDP_SOCKET_PORT:
+            msgLen = snprintf(msg, msgSize,
+                    "Error while closing UDP socket port %d: ", portError);
+            DisplayTCPSocketError(status, &msg[msgLen], msgSize-msgLen);
             break;
 
         default:

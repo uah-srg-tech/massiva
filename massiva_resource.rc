@@ -5,8 +5,8 @@
 # endif
 
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION 4,0,0,3
-	PRODUCTVERSION 4,0,0,3
+	FILEVERSION 4,0,0,6
+	PRODUCTVERSION 4,0,0,6
 	FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 	FILEFLAGS VS_FF_DEBUG
@@ -23,7 +23,7 @@ VS_VERSION_INFO VERSIONINFO
 			BEGIN
 				VALUE "CompanyName", "\0"
 				VALUE "FileDescription", "\0"
-				VALUE "FileVersion", "4.0.0.3\0"
+				VALUE "FileVersion", "4.0.0.5\0"
 				VALUE "LegalCopyright", "\0"
 				VALUE "OriginalFilename", "massiva.exe\0"
 				VALUE "ProductName", "massiva\0"

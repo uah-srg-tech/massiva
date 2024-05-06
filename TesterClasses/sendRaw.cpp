@@ -111,7 +111,7 @@ void sendRaw::send()
                 OutQueue[3] = 0x00;
                 break;
 
-            case UART_PORT: case SOCKET_SRV_PORT: case SOCKET_CLI_PORT:
+            case UART_PORT: case TCP_SOCKET_SRV_PORT: case TCP_SOCKET_CLI_PORT:
                 memcpy(OutQueue, pPort->ptcl.syncPattern,
                         pPort->ptcl.syncPatternLength);
                 break;

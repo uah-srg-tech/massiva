@@ -18,7 +18,8 @@
 #include "EnqueueWorker.h"
 #include "RxPacket.h"
 #include "../PortTools/raw.h"                   /* ReadRaw */
-#include "../PortTools/configSocket.h"
+#include "../PortTools/configTCPSocket.h"
+#include "../PortTools/configUDPSocket.h"
 #include "../CommonTools/GetSetFieldTools.h"    /* GetFieldFromBufferAsUint */
 
 //#define DEBUG_PRINT_EVERY_RX
@@ -99,14 +100,17 @@ void EnqueueWorker::EnqueuePackets()
     }
     
     int retry = 0;
-    if(pPort->portType == SOCKET_SRV_PORT)
+    if(pPort->portType == TCP_SOCKET_SRV_PORT)
+    {
         retry = 1;
+    }
     do {
-        if(pPort->portType == SOCKET_SRV_PORT)
+        if(pPort->portType == TCP_SOCKET_SRV_PORT)
         {
             snprintf(rxErrorMsg, MAX_MSG_SIZE,
-                    "Waiting for connection at TCP/IP port %u (MASSIVA port %u (%s))", 
-                    pPort->config.socket.portNum, rxPort, pPort->name);
+                    "Waiting for connection at %s:%u (MASSIVA port %u (%s))", 
+                    pPort->config.socket.localIp,
+                    pPort->config.socket.localPort, rxPort, pPort->name);
             pLogs->saveMsgToLog(rxPort, NULL, rxErrorMsg);
             emit setStatusBarColor(QString(rxErrorMsg), 255, 255, 0);
 
@@ -120,8 +124,9 @@ void EnqueueWorker::EnqueuePackets()
             }
             if(retry != 0)
             {
-                snprintf(rxErrorMsg, MAX_MSG_SIZE,"Connected TCP/IP port %u\n",
-                        pPort->config.socket.portNum);
+                snprintf(rxErrorMsg, MAX_MSG_SIZE,"Connected %s:%u\n",
+                    pPort->config.socket.localIp,
+                    pPort->config.socket.localPort);
                 pLogs->saveMsgToLog(rxPort, NULL, rxErrorMsg);
                 emit setStatusBarColor(QString(rxErrorMsg), 240, 240, 240);
             }
@@ -269,11 +274,11 @@ void EnqueueWorker::EnqueuePackets()
 #endif
         }
     }while(retry);
-    if(pPort->portType == SOCKET_SRV_PORT)
+    if(pPort->portType == TCP_SOCKET_SRV_PORT)
     {
         UnprepareServer(pPort, rxPort);
     }
-    else if((pPort->portType == SOCKET_CLI_PORT) &&
+    else if((pPort->portType == TCP_SOCKET_CLI_PORT) &&
             (pPort->ptcl.portValid == 1))
     {
         snprintf(rxErrorMsg, MAX_MSG_SIZE, "Server connection at port %u"

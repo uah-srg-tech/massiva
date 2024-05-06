@@ -1,6 +1,6 @@
 /**
- * \file	rawSocket.h
- * \brief	functions for write and read data in socket port (declaration)
+ * \file	rawTCPSocket.h
+ * \brief	functions for write and read data in TCP socket port (declaration)
  *
  * \author	Aaron Montalvo, <aaron.montalvo@uah.es>
  * 
@@ -12,8 +12,8 @@
  * For further information, please visit http://srg.aut.uah.es
  *
  */
-#ifndef __rawSocket_H__
-#define __rawSocket_H__
+#ifndef __rawTCPSocket_H__
+#define __rawTCPSocket_H__
 
 #include "../definitions.h"
 
@@ -21,15 +21,15 @@
 extern "C" {
 #endif
 
-int ReadRawSocket(unsigned char * packet, unsigned int * pLength, 
+int ReadRawTCPSocket(unsigned char * packet, unsigned int * pLength, 
         int * pSocket, protocolConfig * pPtcl);
 
-int WriteRawSocket(const unsigned char * packet, int length, int socket);
+int WriteRawTCPSocket(const unsigned char * packet, int length, int socket);
 
-void RawSocketRWError(int error, char * msg, int msgSize);
+void RawTCPSocketRWError(int error, char * msg, int msgSize);
 
 
 #ifdef __cplusplus
 }
 #endif
-#endif  /* __rawSocket_H__ */
+#endif  /* __rawTCPSocket_H__ */

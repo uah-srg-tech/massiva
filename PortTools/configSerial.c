@@ -48,16 +48,16 @@ static int errorNumber = 0;
 static int currPortHdl = 0;
 #ifdef __linux__
 int ttyports[MAX_SERIAL_PORTS];
-static char ttyNames[5][MAX_DEV_NAME_LEN] =
+static char ttyNames[TTY_OPTIONS][MAX_DEV_NAME_LEN] =
 {
     "/usr/dev/ttyUSB",
     "/dev/ttyUSB", 
     "/usr/dev/ttyS",
-    "/dev/tty", 
-    "/dev/pts/"
-    
+    "/dev/tty",
+    "/dev/pts/",
+    "/dev/tnt"
 };
-static int errorNumbers[4] = {0, 0, 0, 0}, errorPort = -1;
+static int errorNumbers[TTY_OPTIONS-1] = {0, 0, 0, 0, 0}, errorPort = -1;
 #endif
 void resetUartPortHandles()
 {   
@@ -115,8 +115,15 @@ int ConfigureSerial(uartConfig * uart, long baudRate, int parity, int dataBits,
                     if (ttyports[currPortHdl] < 0)
                     {
                         errorNumbers[2] = errno;
-                        /* finally check for "/dev/pts/" simulated port */
+                        /* then check for "/dev/pts/" simulated port */
                         snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[4], uart->portNum);
+                        ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
+                        if (ttyports[currPortHdl] < 0)
+                        {
+                            errorNumbers[3] = errno;
+                            /* finally check for "/dev/tnt" port */
+                            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[5], uart->portNum);
+                        }
                     }
                 }
             }
@@ -355,7 +362,7 @@ int ConfigureSerial(uartConfig * uart, long baudRate, int parity, int dataBits,
     ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
     if (ttyports[currPortHdl] < 0)
     {
-        errorNumbers[3] = errno;
+        errorNumbers[4] = errno;
         errorPort = uart->portNum;
         if(uart->portNum != -1)
             /* copy again first port name for printing error */
@@ -499,7 +506,7 @@ void DisplaySerialError(int error, char * msg, int msgSize)
                     strerror(errorNumber));
             if(errorPort != -1)
             {
-                for(unsigned int i=0; i<4; ++i)
+                for(unsigned int i=0; i<TTY_OPTIONS-1; ++i)
                 {
                     if(errorNumbers[i] == 0)
                     {

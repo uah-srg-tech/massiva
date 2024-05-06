@@ -28,7 +28,7 @@
 /*!
  * Maximum size for packets
  */
-#define MAX_PACKET_SIZE                                 4200
+#define MAX_PACKET_SIZE                                60000
 /*!
  * Maximum log message string length
  */
@@ -111,7 +111,7 @@
 /*!
  * Maximum bool var operand lengths
  */
-#define MAX_STR_OPERAND_LEN                             4200
+#define MAX_STR_OPERAND_LEN                            60000
 #define MAX_NUM_OPERAND_LEN                                8
 
 /*!
@@ -138,6 +138,8 @@
  * Maximum port name length
  */
 #define MAX_PORT_NAME_LEN                                 20
+
+#define TTY_OPTIONS                                        6
 
 #define MAX_DEV_NAME_LEN                                  22
 
@@ -203,8 +205,9 @@ typedef enum {
     SPW_TC_PORT,	/**< SpW dummy port for timecodes */
     SPW_ERROR_PORT,	/**< SpW dummy port for errors */
     UART_PORT,		/**< Serial - UART */
-    SOCKET_SRV_PORT,    /**< Socket - Server */
-    SOCKET_CLI_PORT,    /**< Socket - Client */
+    TCP_SOCKET_SRV_PORT,/**< TCP Socket - Server */
+    TCP_SOCKET_CLI_PORT,/**< TCP Socket - Client */
+    UDP_SOCKET_PORT,    /**< UDP Socket */
     DUMMY_PORT		/**< dummy port */
 }portTypes;
 
@@ -291,14 +294,17 @@ typedef struct
 }spwConfig;
 
 /*!
- * A structure to contain all necessary information for a uart port
+ * A structure to contain all necessary information for a TCP/UDP socket
  */
 typedef struct
 {
     int socketHdl;
-    unsigned int portNum;
-    char ipAddress[16];
-    struct sockaddr_in address;
+    char localIp[16];
+    unsigned int localPort;
+    struct sockaddr_in localAddr;
+    char remoteIp[16];
+    unsigned int remotePort;
+    struct sockaddr_in remoteAddr;
 }socketConfig;
 
 /*!

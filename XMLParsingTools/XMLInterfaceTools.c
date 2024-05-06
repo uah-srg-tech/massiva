@@ -71,10 +71,12 @@ int ParseInterface(xmlNodePtr element, portConfig * ports,
         ports[index].portType = SPW_USB_PORT;
     else if(strncmp(attrData, "uart", 4) == 0)
         ports[index].portType = UART_PORT;
-    else if(strncmp(attrData, "socketCli", 9) == 0)
-        ports[index].portType = SOCKET_CLI_PORT;
-    else if(strncmp(attrData, "socketSrv", 9) == 0)
-        ports[index].portType = SOCKET_SRV_PORT;
+    else if(strncmp(attrData, "TCPsocketCli", 12) == 0)
+        ports[index].portType = TCP_SOCKET_CLI_PORT;
+    else if(strncmp(attrData, "TCPsocketSrv", 12) == 0)
+        ports[index].portType = TCP_SOCKET_SRV_PORT;
+    else if(strncmp(attrData, "UDPsocket", 9) == 0)
+        ports[index].portType = UDP_SOCKET_PORT;
     else if(strncmp(attrData, "dummy", 5) == 0)
         ports[index].portType = DUMMY_PORT;
     else
@@ -155,8 +157,9 @@ void DisplayParseInterfaceError (int status, portConfig * pPort, char * msg,
 
             case WRONG_INTERFACE_TYPE:
                 snprintf(&msg[len], maxMsgSize-len, "Wrong Interface %d type. "
-                        "Only valid \"SpW\", \"uart\", \"dummy\""
-                        "\"socketSrvPort\" or \"socketSrvPort\"", portError);
+                        "Only valid \"SpW\", \"uart\", \"dummy\", "
+                        "\"TCPsocketSrvPort\", \"TCPsocketSrvPort\" or "
+                        "\"UDPsocketPort\"" , portError);
                 break;
 
             case WRONG_INTERFACE_IO_TYPE:

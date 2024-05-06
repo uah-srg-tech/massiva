@@ -41,7 +41,7 @@
 #include "TesterClasses/PeriodicMonitor.h"
 #include "TesterClasses/AutoTester.h"
 
-#define GSS_VERSION     "MASSIVA 4.0.0.3"
+#define GSS_VERSION     "MASSIVA 4.0.0.6"
 #define GSS_TITLE_BAR   "MASSIVA"
 
 using namespace std;
@@ -361,8 +361,8 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
     {
         if((protocolThread == false) && (pGssStruct->getPortIoType(idx) != IN_PORT)
                 && ((pGssStruct->getPortType(idx) == UART_PORT) ||
-                (pGssStruct->getPortType(idx) == SOCKET_SRV_PORT) ||
-                (pGssStruct->getPortType(idx) == SOCKET_CLI_PORT)))
+                (pGssStruct->getPortType(idx) == TCP_SOCKET_SRV_PORT) ||
+                (pGssStruct->getPortType(idx) == TCP_SOCKET_CLI_PORT)))
         {
             /* create a second thread which executes inc_x(&x) */
             if((status = pthread_create(pRs232_rx_thread, NULL,
@@ -372,7 +372,7 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
                 snprintf(auxMsg, strMaxLen, "pthread_create error %d",
                         status);
                 QMessageBox::information(pMainGui,
-                        "Error creating RS232 thread", auxMsg);
+                        "Error creating port protocol thread", auxMsg);
                 return -1;
             }
             protocolThread = true;

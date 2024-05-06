@@ -2965,7 +2965,7 @@ Launch ALL</string>
   </action>
   <action name="actionPeriodic_TCs">
    <property name="text">
-    <string>Periodic TCs</string>
+    <string>Periodic Telecommands</string>
    </property>
   </action>
   <action name="actionPlots">
@@ -2975,12 +2975,12 @@ Launch ALL</string>
   </action>
   <action name="actionSend_single_SpW_TC">
    <property name="text">
-    <string>Send single SpW TC</string>
+    <string>Send single SpW timecode</string>
    </property>
   </action>
   <action name="actionEnable_periodical_SpW_TC">
    <property name="text">
-    <string>Enable periodical SpW TC</string>
+    <string>Enable periodical SpW timecodes</string>
    </property>
   </action>
   <action name="actionOpen_Logs_folder">

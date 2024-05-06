@@ -13,7 +13,7 @@
  *
  */
 #include "configSerial.h"			/* comports */
-#include "configSocket.h"			/* CloseSocket */
+#include "configTCPSocket.h"			/* CloseSocket */
 #if(defined _WIN32 || __CYGWIN__)
 #include <windows.h>				/* Sleep */
 #elif(defined __linux__)
@@ -129,8 +129,8 @@ int readProtocolPacketsBuffer(portConfig * ports)
     for(portIdx=0; portIdx<MAX_INTERFACES; ++portIdx)
     {
         if((ports[portIdx].portType != UART_PORT) &&
-                (ports[portIdx].portType != SOCKET_SRV_PORT) &&
-                (ports[portIdx].portType != SOCKET_CLI_PORT))
+                (ports[portIdx].portType != TCP_SOCKET_SRV_PORT) &&
+                (ports[portIdx].portType != TCP_SOCKET_CLI_PORT))
             continue;
         ports[portIdx].ptcl.buffer.head = 0;
         ports[portIdx].ptcl.buffer.tail = 0;
@@ -147,15 +147,15 @@ int readProtocolPacketsBuffer(portConfig * ports)
         for(portIdx=0; portIdx<MAX_INTERFACES; ++portIdx)
         {                    
             if((ports[portIdx].portType != UART_PORT) &&
-                    (ports[portIdx].portType != SOCKET_SRV_PORT) &&
-                    (ports[portIdx].portType != SOCKET_CLI_PORT))
+                    (ports[portIdx].portType != TCP_SOCKET_SRV_PORT) &&
+                    (ports[portIdx].portType != TCP_SOCKET_CLI_PORT))
                 continue;
 
             /* call mutex for avoiding port closed when reading */
             pthread_mutex_lock(&ptclMutex[portIdx]);
             
-            if(((ports[portIdx].portType == SOCKET_SRV_PORT) ||
-                    (ports[portIdx].portType == SOCKET_CLI_PORT))
+            if(((ports[portIdx].portType == TCP_SOCKET_SRV_PORT) ||
+                    (ports[portIdx].portType == TCP_SOCKET_CLI_PORT))
                     && (ports[portIdx].ptcl.portConnected == 1)
                     && (ports[portIdx].config.socket.socketHdl != -1))
             {
@@ -188,7 +188,7 @@ int readProtocolPacketsBuffer(portConfig * ports)
                         ports[portIdx].ptcl.buffer.head = 0;
                         ports[portIdx].ptcl.buffer.tail = 0;
                         ports[portIdx].ptcl.portConnected = 0;
-                        CloseSocket(&ports[portIdx].config.socket.socketHdl);
+                        CloseTCPSocket(&ports[portIdx].config.socket.socketHdl);
                     }
                     pthread_mutex_unlock(&ptclMutex[portIdx]);
                     continue;
@@ -357,8 +357,8 @@ static int readData(portConfig * pPort, unsigned char * pBufferData,
                 status = 0;
 #endif
         }
-        else if((pPort->portType == SOCKET_SRV_PORT) ||
-                (pPort->portType == SOCKET_CLI_PORT))
+        else if((pPort->portType == TCP_SOCKET_SRV_PORT) ||
+                (pPort->portType == TCP_SOCKET_CLI_PORT))
         {
             status = recv(pPort->config.socket.socketHdl,
                     (char*)&pBufferData[bufferOffset], PTCL_BUFFER_SIZE-bufferOffset, 0);
@@ -393,8 +393,8 @@ static int readData(portConfig * pPort, unsigned char * pBufferData,
                 status = 0;
 #endif
         }
-        else if((pPort->portType == SOCKET_SRV_PORT) ||
-                (pPort->portType == SOCKET_CLI_PORT))
+        else if((pPort->portType == TCP_SOCKET_SRV_PORT) ||
+                (pPort->portType == TCP_SOCKET_CLI_PORT))
         {
             status = recv(pPort->config.socket.socketHdl,
                     (char*)&pBufferData[0], dataLen-(PTCL_BUFFER_SIZE-bufferOffset), 0);
@@ -428,8 +428,8 @@ static int readData(portConfig * pPort, unsigned char * pBufferData,
                 status = 0;
 #endif
         }
-        else if((pPort->portType == SOCKET_SRV_PORT) ||
-                (pPort->portType == SOCKET_CLI_PORT))
+        else if((pPort->portType == TCP_SOCKET_SRV_PORT) ||
+                (pPort->portType == TCP_SOCKET_CLI_PORT))
         {
             status = recv(pPort->config.socket.socketHdl,
                     (char*)&pBufferData[bufferOffset], dataLen, 0);

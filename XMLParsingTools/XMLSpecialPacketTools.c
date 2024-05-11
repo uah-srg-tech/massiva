@@ -42,7 +42,7 @@ static int ParseSpecialPacketInterval(xmlNodePtr period_handle,
 int ParseSpecialPacket(xmlNodePtr spPacket_handle, output * specialPacket,
 	level defaultLevels[MAX_INTERFACES][MAX_LEVELS], portConfig * ports,
 	special_packet_info * pSpecialInfo, unsigned int * levelErrorRef,
-	char attrData[70], const char * relativePath)
+    char attrData[ATTR_SIZE], const char * relativePath)
 {
     int status = 0;
     unsigned int lvlRef = 0, index = 0, aux_uint = 0, numberOfElements = 0, numberOfItems = 0;
@@ -490,7 +490,7 @@ void DisplayParseSpecialPacketError (int status, int packetError, char * msg,
 }
 
 static int ParseSpecialPacketPeriod(xmlNodePtr period_handle,
-	special_packet_info * pSpecialInfo, char attrData[70])
+    special_packet_info * pSpecialInfo, char attrData[ATTR_SIZE])
 {
     int status = 0;
     //0 is min period, 1 for times smaller than min period
@@ -539,7 +539,7 @@ static int ParseSpecialPacketPeriod(xmlNodePtr period_handle,
 }
 
 static int ParseSpecialPacketInterval(xmlNodePtr period_handle,
-	special_packet_info * pSpecialInfo, char attrData[70])
+    special_packet_info * pSpecialInfo, char attrData[ATTR_SIZE])
 {
     int status = 0;
     //0 is min packets in interval, 1 for times smaller than min

@@ -13,6 +13,7 @@
 #include <limits>
 #include "selectProtocolPacket.h"
 #include "../TesterClasses/TxStep.h"
+#include "../CommonClasses/MathTools.h"
 
 selectProtocolPacket::selectProtocolPacket(gssStructs * origGssStruct, Logs * origLogs,
             TestManager * origTestMgr, mainForm * origMainGui, RxTxInfo * origTxRxTabs,
@@ -56,8 +57,7 @@ void selectProtocolPacket::createProtocolPacketMenu()
             ppAction[pp] = new QAction(pMainGui->mainContent.menuSend_Protocol_Packets);
             ppAction[pp]->setObjectName(QString::fromUtf8(pGssStruct->getProtocolPacketName(pp)));
             pMainGui->mainContent.menuSend_Protocol_Packets->addAction(ppAction[pp]);
-            ppAction[pp]->setText(QApplication::translate("mainForm",
-                    pGssStruct->getProtocolPacketName(pp), 0, QApplication::UnicodeUTF8));
+            ppAction[pp]->setText(pGssStruct->getProtocolPacketName(pp));
             connect(ppAction[pp], SIGNAL(triggered()), this, SLOT(selectProtocolPacketMenu()));
         }
     }
@@ -252,7 +252,11 @@ void selectProtocolPacket::selectProtocolPacketMenu()
         {
             labels = new QLabel *[numberOfSpinBoxes];
         }
+#if QT_VERSION >= 0x050000
+        hexSpinBoxes = new QSpinBox*[numberOfSpinBoxes];
+#else
         hexSpinBoxes = new HexSpinBox*[numberOfSpinBoxes];
+#endif
         sbFieldMap = new unsigned int[numberOfSpinBoxes];
         sbIndexMap = new unsigned int[numberOfSpinBoxes];
         isFirstCopy = new bool[numberOfSpinBoxes];
@@ -331,16 +335,19 @@ void selectProtocolPacket::selectProtocolPacketMenu()
             labels[sb]->setMinimumSize(QSize(100, 13));
             widget.gridLayout->addWidget(labels[sb], vertRef[sb], 2*horizRef[sb]);
             
-            if(pProtPacket->in[1].TCFields[sbFieldMap[sb]].type == VSFIELD)
+#if QT_VERSION >= 0x050000
+            hexSpinBoxes[sb] = new QSpinBox(this);
+            hexSpinBoxes[sb]->setDisplayIntegerBase(16);
+#else
+			unsigned int bytes = 1;
+            if(pProtPacket->in[1].TCFields[sbFieldMap[sb]].type != VSFIELD)
             {
                 /* as default N=1 - max bytes length = 2 (thus max Data=0xFF)*/
-                hexSpinBoxes[sb] = new HexSpinBox(this, 1);
-           }
-            else
-            {
-               hexSpinBoxes[sb] =
-                        new HexSpinBox(this, pProtPacket->in[1].TCFields[sbFieldMap[sb]].totalSizeInBits/8);
-            }
+				bytes = pProtPacket->in[1].TCFields[sbFieldMap[sb]].totalSizeInBits/8;
+			}
+			hexSpinBoxes[sb] = new HexSpinBox(this, bytes);
+#endif
+
             hexSpinBoxes[sb]->setObjectName(QString::fromUtf8("hexSpinBox") + QString::number(sb));
             hexSpinBoxes[sb]->setMinimumSize(QSize(120, 22));
             widget.gridLayout->addWidget(hexSpinBoxes[sb], vertRef[sb], 2*horizRef[sb]+1);
@@ -376,7 +383,11 @@ void selectProtocolPacket::selectProtocolPacketMenu()
                     connect(hexSpinBoxes[sb], SIGNAL(valueChanged(qulonglong)),
                             this, SLOT(updateVariableField(qulonglong)));
                 }
+#if QT_VERSION >= 0x050000
+                hexSpinBoxes[sb]->setMaximum(maxItems);
+#else
                 hexSpinBoxes[sb]->setMaximum(maxItems, false);
+#endif
             }
         }
         delete[] vertRef;
@@ -423,7 +434,7 @@ void selectProtocolPacket::updateVariableField(qulonglong newValue)
     {
         if(pProtPacket->in[1].TCFields[sbFieldMap[sb]].type == VSFIELD)
         {
-            hexSpinBoxes[sb]->setMaximum(HexSpinBox::ullpow(2, newValue*8)-1);
+            hexSpinBoxes[sb]->setMaximum(MathTools::ullpow(2, newValue*8)-1);
         }
     }
 }

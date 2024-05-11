@@ -64,8 +64,7 @@ void selectRawFileForm::createSendRawMenu()
         portAction[port] = new QAction(pMainGui->mainContent.menuSend_Raw_Commands);
         portAction[port]->setObjectName(QString::fromUtf8(pGssStruct->getPortName(port)));
         pMainGui->mainContent.menuSend_Raw_Commands->addAction(portAction[port]);
-        portAction[port]->setText(QApplication::translate("mainForm",
-                pGssStruct->getPortName(port), 0, QApplication::UnicodeUTF8));
+        portAction[port]->setText(pGssStruct->getPortName(port));
         connect(portAction[port], SIGNAL(triggered()), this, SLOT(selectRawMenu()));
     }
 }
@@ -134,7 +133,7 @@ void selectRawFileForm::selectFile()
     QString filenameString = QFileDialog::getOpenFileName(this,
         tr("Choose a file to get data"), tr(pInitialConfig->GetFile(GSS_LAST)),
         tr("text (*.txt *.dat)"));
-    if(filenameString == NULL)
+    if(filenameString.isNull())
     {
         if(commandFilename[0] == 0)
             widget.okButton->setEnabled(false);

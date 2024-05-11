@@ -28,12 +28,18 @@ SpWTimeCodesDialog::SpWTimeCodesDialog(gssStructs * origGssStruct,
     spw_tc_port = port;
     pSpWTCPort = pGssStruct->getPointerToPort(spw_tc_port);
     
+#if QT_VERSION >= 0x050000
+    tcValueBox = new QSpinBox(this);
+    tcValueBox->setDisplayIntegerBase(16);
+    tcValueBox->setMaximum(63);
+#else
     tcValueBox = new HexSpinBox(this, 1);
+    tcValueBox->setMaximum(63, true);
+#endif
     tcValueBox->setObjectName(QString::fromUtf8("tcValueBox"));
     tcValueBox->setGeometry(QRect(40, 50, 81, 21));
     tcValueBox->setValue(0);
     tcValueBox->setMinimum(0);
-    tcValueBox->setMaximum(63, true);
     tcValueBox->stepBy(1);
     periodicalFreq = new QSpinBox(this);
     periodicalFreq->setObjectName(QString::fromUtf8("periodicalFreq"));
@@ -73,8 +79,7 @@ void SpWTimeCodesDialog::ShowSendSingleSpWTCDialog()
     tcValueBox->show();
     periodicalFreq->hide();
     hertz->hide();
-    spwTC_button->setText(QApplication::translate("mainForm",
-            "Send single TC", 0, QApplication::UnicodeUTF8));
+    spwTC_button->setText("Send single TC");
     spwTC_button->show();
     dialog_is_single_spw_tc = true;
     this->show();
@@ -113,8 +118,7 @@ void SpWTimeCodesDialog::ShowEnableDisableSpWTCDialog()
         periodicalFreq->setValue(last_freq_hertz);
         periodicalFreq->show();
         hertz->show();
-        spwTC_button->setText(QApplication::translate("mainForm",
-                "Enable periodical TCs", 0, QApplication::UnicodeUTF8));
+        spwTC_button->setText("Enable periodical TCs");
         spwTC_button->show();
         dialog_is_single_spw_tc = false;
         this->show();

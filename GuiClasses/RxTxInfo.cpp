@@ -73,7 +73,7 @@ void RxTxInfo::fillRxTxTab(unsigned int idx, ioTypes currentType)
         txCount[idx]->setSmallDecimalPoint(true);
         txCount[idx]->setMode(QLCDNumber::Dec);
         txCount[idx]->setSegmentStyle(QLCDNumber::Flat);
-        txCount[idx]->setNumDigits(6);
+        txCount[idx]->setDigitCount(6);
         txCount[idx]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         gridLayout->addWidget(txCount[idx], 0, 0, 1, 1);
         txPrint[idx] = new QLineEdit(tab[idx]);
@@ -101,7 +101,7 @@ void RxTxInfo::fillRxTxTab(unsigned int idx, ioTypes currentType)
         rxCount[idx]->setSmallDecimalPoint(true);
         rxCount[idx]->setMode(QLCDNumber::Dec);
         rxCount[idx]->setSegmentStyle(QLCDNumber::Flat);
-        rxCount[idx]->setNumDigits(6);
+        rxCount[idx]->setDigitCount(6);
         rxCount[idx]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
         gridLayout->addWidget(rxCount[idx], 2, 0, 2, 1);
         rxPrint1[idx] = new QLineEdit(tab[idx]);
@@ -129,8 +129,7 @@ void RxTxInfo::fillRxTxTab(unsigned int idx, ioTypes currentType)
     logButton[idx] = new QPushButton(tab[idx]);
     logButton[idx]->setObjectName(QString("log" + tabIdxStr + "Button"));
     logButton[idx]->setGeometry(QRect(10, 100, 81, 21));
-    logButton[idx]->setText(QApplication::translate("mainForm", "Log", 0,
-            QApplication::UnicodeUTF8));
+    logButton[idx]->setText("Log");
     gridLayout->addWidget(logButton[idx], 4, 0, 1, 1);
     return;
 }

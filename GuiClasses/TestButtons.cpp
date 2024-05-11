@@ -176,7 +176,7 @@ void TestButtons::SendOneStep()
             tr("Choose the file with the desired Step"),
             tr(pInitialConfig->GetFile(WORKSPACE_LAST)),
             tr("XML/XMI files (*.xml *.xmi)"));
-    if(filenameString == NULL)
+    if(filenameString.isNull())
         return;
     
     IsFullTest = false;
@@ -199,7 +199,7 @@ void TestButtons::SendSeveralSteps()
     QString filenameString = QFileDialog::getOpenFileName(pMainGui,
             tr("Choose a file with the Step number list with ';'"),
             tr(pInitialConfig->GetFile(GSS_LAST)), tr("text (*.txt)"));
-    if(filenameString == NULL)
+    if(filenameString.isNull())
         return;
     
     IsFullTest = false;

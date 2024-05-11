@@ -17,7 +17,9 @@
 #include "ui_selectProtocolPacket.h"
 #include "ui_selectProtocolPacket.h"
 #include "../CommonClasses/Logs.h"
+#if QT_VERSION < 0x050000
 #include "../GuiClasses/HexSpinBox.h"
+#endif
 #include "../GuiClasses/RxTxInfo.h"
 #include "../GuiClasses/MonitorPlots.h"
 #include "mainForm.h"
@@ -48,7 +50,11 @@ private:
     protocolPacket * pProtPacket;
     input * pStepIn;
     unsigned int numberOfSpinBoxes;
+#if QT_VERSION >= 0x050000
+    QSpinBox ** hexSpinBoxes;
+#else
     HexSpinBox ** hexSpinBoxes;
+#endif
     QLabel ** labels;
     unsigned int * sbFieldMap;
     unsigned int * sbIndexMap;

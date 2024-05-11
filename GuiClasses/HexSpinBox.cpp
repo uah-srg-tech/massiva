@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <limits>
 #include "HexSpinBox.h"
+#include "../CommonClasses/MathTools.h"
 #define UNUSED(x) (void)(x)
 
 HexSpinBox::HexSpinBox(QWidget *parent, unsigned int bytes): QAbstractSpinBox(parent)
@@ -10,7 +11,7 @@ HexSpinBox::HexSpinBox(QWidget *parent, unsigned int bytes): QAbstractSpinBox(pa
     validator = new QRegExpValidator(QRegExp(regExp), this);
     
     m_maxTextLength = 2*bytes;
-    setRange(0, ullpow(2, bytes*8)-1);
+    setRange(0, MathTools::ullpow(2, bytes*8)-1);
     setValue(0);
 }
 
@@ -73,21 +74,6 @@ void HexSpinBox::stepBy(int steps)
         value += steps;
     }
     setValue(value);
-}
-
-qulonglong HexSpinBox::ullpow(qulonglong base, uint exp)
-{
-    qulonglong result = 1ULL;
-    while(exp)
-    {
-        if (exp & 1)
-        {
-            result *= base;
-        }
-        exp >>= 1;
-        base *= base;
-    }
-    return result;
 }
 
 QValidator::State HexSpinBox::validate(QString &input, int &pos) const

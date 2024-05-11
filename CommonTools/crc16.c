@@ -9,7 +9,7 @@
  * \internal
  * Created: 	30/04/2012
  * Compiler: 	gcc/g++
- * Company:  Space Research Group, Universidad de Alcal‡.
+ * Company:  Space Research Group, Universidad de Alcalâ€¡.
  * Copyright: Copyright (c) 2012, Alberto Carrasco Gallardo
  *			  Copyright (c) 2012, Oscar Rodriguez Polo
  * 			  Copyright (c) 2012, Pablo Parra Espada

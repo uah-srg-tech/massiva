@@ -2,7 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
         <activeConfTypeElem>4</activeConfTypeElem>
-        <activeConfIndexElem>0</activeConfIndexElem>
+        <activeConfIndexElem>3</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
         <file>
@@ -23,6 +23,14 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/media/sf_workspace/massiva/PortTools/configSerial.c</file>
+            <file>file:/media/sf_workspace/massiva/Forms/mainForm.h</file>
+            <file>file:/media/sf_workspace/massiva/main.cpp</file>
+            <file>file:/media/sf_workspace/massiva/PortTools/raw.c</file>
+            <file>file:/media/sf_workspace/massiva/definitions.h</file>
+            <file>file:/media/sf_workspace/massiva/Forms/AboutDialog.cpp</file>
+            <file>file:/media/sf_workspace/massiva/Forms/mainForm.cpp</file>
+        </group>
     </open-files>
 </project-private>

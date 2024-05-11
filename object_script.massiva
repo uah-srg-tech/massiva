@@ -6,6 +6,7 @@ INPUT(
 ./build/Debug/MinGW-Windows/ProcessPacket.o
 ./build/Debug/MinGW-Windows/InitialConfig.o
 ./build/Debug/MinGW-Windows/Logs.o
+./build/Debug/MinGW-Windows/MathTools.o
 ./build/Debug/MinGW-Windows/gssStructs.o
 ./build/Debug/MinGW-Windows/GetSetFieldTools.o
 ./build/Debug/MinGW-Windows/crc16.o

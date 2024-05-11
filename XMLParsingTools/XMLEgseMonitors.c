@@ -486,7 +486,7 @@ void DisplayParseMonitorError (int status, int errorMonitor, char * msg,
     return;
 }
 
-int ParseCharts(gss_config * pConfig, char attrData[70],
+int ParseCharts(gss_config * pConfig, char attrData[ATTR_SIZE],
         const char * relativePath)
 {
     int status = 0;

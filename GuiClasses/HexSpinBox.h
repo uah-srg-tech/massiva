@@ -22,7 +22,6 @@ public:
     void setMaximum(qulonglong max, bool limitLength = true);
     void setRange(qulonglong min, qulonglong max);
     void stepBy(int steps);
-    static qulonglong ullpow(qulonglong base, uint exp);
 
 public slots:
     void setValue(qulonglong value);

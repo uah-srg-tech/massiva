@@ -38,7 +38,7 @@ static int ParseProtocolPacket(xmlNodePtr pp_handle, protocolPacket * protocolPa
         level defaultLevels[MAX_INTERFACES][MAX_LEVELS], char attrData[ATTR_SIZE],
         const char * relativePath);
 
-int ParseProtocolPackets(gss_config * pConfig, char attrData[70],
+int ParseProtocolPackets(gss_config * pConfig, char attrData[ATTR_SIZE],
         const char * relativePath)
 {
     int status = 0;
@@ -114,7 +114,7 @@ int ParseProtocolPackets(gss_config * pConfig, char attrData[70],
 
 static int ParseProtocolPacket(xmlNodePtr pp_handle, protocolPacket * protocolPacket,
         unsigned int defaultNumberOfLevels[MAX_INTERFACES],
-        level defaultLevels[MAX_INTERFACES][MAX_LEVELS], char attrData[70],
+        level defaultLevels[MAX_INTERFACES][MAX_LEVELS], char attrData[ATTR_SIZE],
         const char * relativePath)
 {
     int status = 0;

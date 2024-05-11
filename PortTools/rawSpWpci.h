@@ -6,7 +6,7 @@
  * 
  * \internal
  * Created:		30/07/2013 at 16:09:38
- * Company:		Space Research Group, Universidad de Alcal·.
+ * Company:		Space Research Group, Universidad de Alcal√°.
  * Copyright:	Copyright (c) 2013, Aaron Montalvo
  *
  * For further information, please visit http://srg.aut.uah.es

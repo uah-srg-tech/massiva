@@ -18,7 +18,9 @@
 #include "mainForm.h"
 #include <QPushButton>
 #include <QSpinBox>
+#if QT_VERSION < 0x050000
 #include "../GuiClasses/HexSpinBox.h"
+#endif
 
 class SpWTimeCodesDialog : public QDialog {
     
@@ -52,7 +54,11 @@ private:
     unsigned int last_freq_hertz;
     bool dialog_is_single_spw_tc;
     
+#if QT_VERSION >= 0x050000
+    QSpinBox * tcValueBox;
+#else
     HexSpinBox * tcValueBox;
+#endif
     QSpinBox * periodicalFreq;
     QPushButton * spwTC_button;
     QLabel * hertz;

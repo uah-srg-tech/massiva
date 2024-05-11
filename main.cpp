@@ -41,7 +41,7 @@
 #include "TesterClasses/PeriodicMonitor.h"
 #include "TesterClasses/AutoTester.h"
 
-#define GSS_VERSION     "MASSIVA 4.0.0.6"
+#define GSS_VERSION     "MASSIVA 4.0.0.7"
 #define GSS_TITLE_BAR   "MASSIVA"
 
 using namespace std;
@@ -586,8 +586,7 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
             snprintf(&auxMsg[status], strMaxLen-status, " [Auto Test : %s]",
                     pGssStruct->getProcedureName(pGssStruct->getCurrentTest()));
     }
-    pMainGui->setWindowTitle(QApplication::translate("mainForm",
-        auxMsg, 0, QApplication::UnicodeUTF8));
+    pMainGui->setWindowTitle(auxMsg);
     
     /* create raw and protocol packet menus */
     pSendRawGui->createSendRawMenu();

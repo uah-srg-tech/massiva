@@ -20,6 +20,8 @@
       <itemPath>CommonClasses/InitialConfig.h</itemPath>
       <itemPath>CommonClasses/Logs.cpp</itemPath>
       <itemPath>CommonClasses/Logs.h</itemPath>
+      <itemPath>CommonClasses/MathTools.cpp</itemPath>
+      <itemPath>CommonClasses/MathTools.h</itemPath>
       <itemPath>CommonClasses/gssStructs.cpp</itemPath>
       <itemPath>CommonClasses/gssStructs.h</itemPath>
     </logicalFolder>
@@ -209,7 +211,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.5</version>
+        <version>4.0.0.7</version>
         <modules>core gui widgets opengl</modules>
         <defs>
           <Elem>RESOURCES += icons.qrc logos.qrc</Elem>
@@ -273,6 +275,10 @@
       <item path="CommonClasses/Logs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="CommonClasses/Logs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CommonClasses/gssStructs.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -631,7 +637,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.5</version>
+        <version>4.0.0.7</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets opengl</modules>
         <defs>
@@ -684,6 +690,30 @@
         <packType>Tar</packType>
         <additionalOptions>-v</additionalOptions>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -3276,6 +3306,10 @@
       </item>
       <item path="CommonClasses/Logs.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="CommonClasses/MathTools.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CommonClasses/gssStructs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="CommonClasses/gssStructs.h" ex="false" tool="3" flavor2="0">
@@ -3633,7 +3667,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva_no_spw</target>
-        <version>4.0.0.5</version>
+        <version>4.0.0.7</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets opengl</modules>
         <defs>
@@ -3678,6 +3712,30 @@
         <packType>Tar</packType>
         <additionalOptions>-v</additionalOptions>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -6270,6 +6328,10 @@
       </item>
       <item path="CommonClasses/Logs.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="CommonClasses/MathTools.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="CommonClasses/gssStructs.cpp" ex="false" tool="1" flavor2="8">
       </item>
       <item path="CommonClasses/gssStructs.h" ex="false" tool="3" flavor2="0">
@@ -6626,7 +6688,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.5</version>
+        <version>4.0.0.7</version>
         <modules>core gui widgets</modules>
         <defs>
           <Elem>RESOURCES += icons.qrc logos.qrc</Elem>
@@ -6685,6 +6747,10 @@
       <item path="CommonClasses/Logs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="CommonClasses/Logs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CommonClasses/gssStructs.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -7042,7 +7108,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.5</version>
+        <version>4.0.0.7</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets</modules>
         <defs>
@@ -7102,6 +7168,10 @@
       <item path="CommonClasses/Logs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="CommonClasses/Logs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="CommonClasses/MathTools.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="CommonClasses/gssStructs.cpp" ex="false" tool="1" flavor2="0">
       </item>

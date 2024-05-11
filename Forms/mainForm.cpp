@@ -396,8 +396,8 @@ int mainForm::SwitchConfigGSS()
             QObject::tr(auxCharArray),
             QObject::tr(pInitialConfig->GetFile(WORKSPACE_LAST)),
             QObject::tr("XML/XMI files (*.xml *.xmi)"),
-            0, QFileDialog::DontUseNativeDialog); 
-    if(filenameString == NULL)
+            0, QFileDialog::DontUseNativeDialog);
+    if(filenameString.isNull())
     {
         chdir(pInitialConfig->GetFile(GSS));
         return -1;

@@ -185,7 +185,8 @@ void Logs::printRawPacket(logFileSource rawType, const unsigned char * packet,
     if(logFiles[RAW_LOG_IDX] != NULL)
     {
         gettimeofday(&time_now, NULL);
-        timeinfo = gmtime(&time_now.tv_sec);
+        time_t t_secs = (time_t)&time_now.tv_sec;
+        timeinfo = gmtime(&t_secs);
         
         time(&timeRef);
         timeinfo = localtime (&timeRef);
@@ -376,7 +377,7 @@ bool Logs::UpdateLogFolder()
             pInitialConfig->GetFile(LOG_FOLDER_NAME));
     QString folderString = QFileDialog::getExistingDirectory (0,
             QObject::tr(auxCharArray), QObject::tr(folderChar));
-    if(folderString == NULL)
+    if(folderString.isNull())
         return false;
     QByteArray folderArray = folderString.toLatin1();
     memset(auxCharArray, 0, strMaxLen);

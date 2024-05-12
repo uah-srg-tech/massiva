@@ -91,38 +91,60 @@ int ConfigureSerial(uartConfig * uart, long baudRate, int parity, int dataBits,
 #if(defined _WIN32 || __CYGWIN__)
         snprintf(uart->portName, MAX_DEV_NAME_LEN, "\\\\.\\COM%u", uart->portNum);
 #elif(defined __linux__)
-        /* first check for any default ttyUSB "/dev/ttyUSB" port */
-        snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[0], uart->portNum);
-        ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
-        if (ttyports[currPortHdl] < 0)
+        if(strlen(uart->portName) > 0)
         {
+            //There is a port name given in XML. Simply append the port number
+            strncpy(deviceInfo, uart->portName, MAX_DEV_INFO_LEN);
+            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", deviceInfo, uart->portNum);
             errorNumber = errno;
-            /* then check for any ttyUSB in /usr/ "/usr/dev/ttyUSB" */
-            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[1], uart->portNum);
+            errorPort = uart->portNum;
+            return CANT_OPEN_PORT;
+        }
+        else {
+            /* first check for any default ttyUSB "/dev/ttyUSB" port */
+            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[0], uart->portNum);
             ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
             if (ttyports[currPortHdl] < 0)
             {
-                errorNumbers[0] = errno;
-                /* then check for any /dev/ttyUSB" port */
-                snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[2], uart->portNum);
+                errorNumber = errno;
+                /* then check for any ttyUSB in /usr/ "/usr/dev/ttyUSB" */
+                snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[1], uart->portNum);
                 ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
                 if (ttyports[currPortHdl] < 0)
                 {
-                    errorNumbers[1] = errno;
-                    /* then check for "/usr/dev/ttyS (socat)" persistent defined ttyUSB port */
-                    snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[3], uart->portNum);
+                    errorNumbers[0] = errno;
+                    /* then check for any /dev/ttyUSB" port */
+                    snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[2], uart->portNum);
                     ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
                     if (ttyports[currPortHdl] < 0)
                     {
-                        errorNumbers[2] = errno;
-                        /* then check for "/dev/pts/" simulated port */
-                        snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[4], uart->portNum);
+                        errorNumbers[1] = errno;
+                        /* then check for "/usr/dev/ttyS (socat)" persistent defined ttyUSB port */
+                        snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[3], uart->portNum);
                         ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
                         if (ttyports[currPortHdl] < 0)
                         {
-                            errorNumbers[3] = errno;
-                            /* finally check for "/dev/tnt" port */
-                            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[5], uart->portNum);
+                            errorNumbers[2] = errno;
+                            /* then check for "/dev/pts/" simulated port */
+                            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[4], uart->portNum);
+                            ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
+                            if (ttyports[currPortHdl] < 0)
+                            {
+                                errorNumbers[3] = errno;
+                                /* finally check for "/dev/tnt" port */
+                                snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[5], uart->portNum);
+                                ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
+                                if (ttyports[currPortHdl] < 0)
+                                {
+                                    errorNumbers[4] = errno;
+                                    /* final check: copy again first port name for printing error */
+                                    errorPort = uart->portNum;
+                                    if(uart->portNum != -1)
+                                        /* copy again first port name for printing error */
+                                        snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[0], uart->portNum);
+                                    return CANT_OPEN_PORT;
+                                }
+                            }
                         }
                     }
                 }
@@ -356,18 +378,6 @@ int ConfigureSerial(uartConfig * uart, long baudRate, int parity, int dataBits,
         default:
             errorNumber = parity;
             return INVALID_PARITY;
-    }
-
-    /* if portNum used, check for "/dev/pts/" simulated port */
-    ttyports[currPortHdl] = open(uart->portName, O_RDWR | O_NOCTTY | O_NDELAY);
-    if (ttyports[currPortHdl] < 0)
-    {
-        errorNumbers[4] = errno;
-        errorPort = uart->portNum;
-        if(uart->portNum != -1)
-            /* copy again first port name for printing error */
-            snprintf(uart->portName, MAX_DEV_NAME_LEN, "%s%u", ttyNames[0], uart->portNum);
-        return CANT_OPEN_PORT;
     }
     struct termios getParams;
     tcgetattr(ttyports[currPortHdl], &getParams);

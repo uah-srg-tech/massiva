@@ -222,7 +222,7 @@ static int ParseFormatField(xmlNodePtr element, formatField ** fields,
         return status;
     }
     strncpy(fields[0][idx].name, attrData, MAX_FIELD_NAME_LEN);
-    /* get number of attributes and store in 'nameLen' */
+    /* get number of attributes and store in 'numAttributes' */
     if((status = GetXMLNumAttributes(element, &numAttributes)) != 0)
     {
         return status;

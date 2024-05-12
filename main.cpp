@@ -41,7 +41,7 @@
 #include "TesterClasses/PeriodicMonitor.h"
 #include "TesterClasses/AutoTester.h"
 
-#define GSS_VERSION     "MASSIVA 4.0.0.7"
+#define GSS_VERSION     "MASSIVA 4.0.0.8"
 #define GSS_TITLE_BAR   "MASSIVA"
 
 using namespace std;

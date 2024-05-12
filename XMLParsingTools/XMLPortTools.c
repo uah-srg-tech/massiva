@@ -466,7 +466,7 @@ static int ParseSpWAuxPort (const char * portConfigFile, const char * relativePa
 static int ParseSerialPort (const char * portConfigFile, const char * relativePath,
         portConfig * pPort, serialConfig * pSerial, unsigned int portIndex)
 {
-    unsigned int numberOfChildren;
+    unsigned int numberOfChildren, numAttributes;
     char attrData[32];
     int status = 0, portNumber = -1;
     xmlDocPtr doc = NULL;
@@ -604,6 +604,22 @@ static int ParseSerialPort (const char * portConfigFile, const char * relativePa
     {
         return status;
     }
+    
+    if((status = GetXMLNumAttributes(child, &numAttributes)) != 0)
+    {
+        return status;
+    }
+    if(numAttributes == 7)
+    {
+        /* get portName */ 
+        if((status = GetXMLAttributeValueByName(child, "portName", attrData,
+                ATTR_PORT_SIZE)) != 0)
+        {
+            return status;
+        }
+        snprintf(pPort->config.uart.portName, MAX_DEV_NAME_LEN, "%s", attrData);
+    }
+    
     status = ParsePortProtocol(greatchild, attrData, &pPort->ptcl, 
             &pPort->portPhyHeaderOffsetTC, &pPort->portPhyHeaderOffsetTM);
     xmlFreeDoc(doc);

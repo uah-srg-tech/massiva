@@ -27,8 +27,5 @@ RESOURCES += icons.qrc logos.qrc
 UI_DIR += Forms
 RC_FILE = icon.rc
 
-win32:LIBS += -L$$PWD/../../QtInstall/libxml2-v2.13.1/.libs -lxml2
-win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-v2.13.1/include
-win32:DEPENDPATH += $$PWD/../../QtInstall/libxml2-v2.13.1/include
-
 unix:LIBS += -lxml2
+unix:INCLUDEPATH += /usr/include/libxml2

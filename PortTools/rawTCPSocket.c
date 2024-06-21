@@ -55,7 +55,7 @@ void RawTCPSocketRWError(int error, char * msg, int msgSize)
             MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), (LPWSTR) &lpMsgBuf,
             0, NULL);
     if (dwRC && lpMsgBuf)
-        snprintf(msg, msgSize, "(%d) %ls", error, (char*)lpMsgBuf);
+        snprintf(msg, msgSize, "(%d) %ls", error, (wchar_t*)lpMsgBuf);
 #else
     dwRC = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |

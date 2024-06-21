@@ -358,7 +358,7 @@ public:
         specialCount_12->setMaximumSize(QSize(50, 16));
         specialCount_12->setFrameShadow(QFrame::Plain);
         specialCount_12->setSmallDecimalPoint(true);
-        specialCount_12->setNumDigits(6);
+        specialCount_12->setDigitCount(6);
         specialCount_12->setMode(QLCDNumber::Dec);
         specialCount_12->setSegmentStyle(QLCDNumber::Flat);
         specialCount_12->setProperty("value", QVariant(0));
@@ -373,7 +373,7 @@ public:
         specialCount_5->setMaximumSize(QSize(50, 16));
         specialCount_5->setFrameShadow(QFrame::Plain);
         specialCount_5->setSmallDecimalPoint(true);
-        specialCount_5->setNumDigits(6);
+        specialCount_5->setDigitCount(6);
         specialCount_5->setMode(QLCDNumber::Dec);
         specialCount_5->setSegmentStyle(QLCDNumber::Flat);
         specialCount_5->setProperty("value", QVariant(0));
@@ -428,7 +428,7 @@ public:
         specialCount_4->setMaximumSize(QSize(50, 16));
         specialCount_4->setFrameShadow(QFrame::Plain);
         specialCount_4->setSmallDecimalPoint(true);
-        specialCount_4->setNumDigits(6);
+        specialCount_4->setDigitCount(6);
         specialCount_4->setMode(QLCDNumber::Dec);
         specialCount_4->setSegmentStyle(QLCDNumber::Flat);
         specialCount_4->setProperty("value", QVariant(0));
@@ -505,7 +505,7 @@ public:
         specialCount_2->setMaximumSize(QSize(50, 16));
         specialCount_2->setFrameShadow(QFrame::Plain);
         specialCount_2->setSmallDecimalPoint(true);
-        specialCount_2->setNumDigits(6);
+        specialCount_2->setDigitCount(6);
         specialCount_2->setMode(QLCDNumber::Dec);
         specialCount_2->setSegmentStyle(QLCDNumber::Flat);
         specialCount_2->setProperty("value", QVariant(0));
@@ -583,7 +583,7 @@ public:
         specialCount_1->setMaximumSize(QSize(50, 16));
         specialCount_1->setFrameShadow(QFrame::Plain);
         specialCount_1->setSmallDecimalPoint(true);
-        specialCount_1->setNumDigits(6);
+        specialCount_1->setDigitCount(6);
         specialCount_1->setMode(QLCDNumber::Dec);
         specialCount_1->setSegmentStyle(QLCDNumber::Flat);
         specialCount_1->setProperty("value", QVariant(0));
@@ -615,7 +615,7 @@ public:
         specialCount_8->setMaximumSize(QSize(50, 16));
         specialCount_8->setFrameShadow(QFrame::Plain);
         specialCount_8->setSmallDecimalPoint(true);
-        specialCount_8->setNumDigits(6);
+        specialCount_8->setDigitCount(6);
         specialCount_8->setMode(QLCDNumber::Dec);
         specialCount_8->setSegmentStyle(QLCDNumber::Flat);
         specialCount_8->setProperty("value", QVariant(0));
@@ -685,7 +685,7 @@ public:
         specialCount_13->setMaximumSize(QSize(50, 16));
         specialCount_13->setFrameShadow(QFrame::Plain);
         specialCount_13->setSmallDecimalPoint(true);
-        specialCount_13->setNumDigits(6);
+        specialCount_13->setDigitCount(6);
         specialCount_13->setMode(QLCDNumber::Dec);
         specialCount_13->setSegmentStyle(QLCDNumber::Flat);
         specialCount_13->setProperty("value", QVariant(0));
@@ -717,7 +717,7 @@ public:
         specialCount_11->setMaximumSize(QSize(50, 16));
         specialCount_11->setFrameShadow(QFrame::Plain);
         specialCount_11->setSmallDecimalPoint(true);
-        specialCount_11->setNumDigits(6);
+        specialCount_11->setDigitCount(6);
         specialCount_11->setMode(QLCDNumber::Dec);
         specialCount_11->setSegmentStyle(QLCDNumber::Flat);
         specialCount_11->setProperty("value", QVariant(0));
@@ -784,7 +784,7 @@ public:
         specialCount_3->setMaximumSize(QSize(50, 16));
         specialCount_3->setFrameShadow(QFrame::Plain);
         specialCount_3->setSmallDecimalPoint(true);
-        specialCount_3->setNumDigits(6);
+        specialCount_3->setDigitCount(6);
         specialCount_3->setMode(QLCDNumber::Dec);
         specialCount_3->setSegmentStyle(QLCDNumber::Flat);
         specialCount_3->setProperty("value", QVariant(0));
@@ -799,7 +799,7 @@ public:
         specialCount_0->setMaximumSize(QSize(50, 16));
         specialCount_0->setFrameShadow(QFrame::Plain);
         specialCount_0->setSmallDecimalPoint(true);
-        specialCount_0->setNumDigits(6);
+        specialCount_0->setDigitCount(6);
         specialCount_0->setMode(QLCDNumber::Dec);
         specialCount_0->setSegmentStyle(QLCDNumber::Flat);
         specialCount_0->setProperty("value", QVariant(0));
@@ -830,7 +830,7 @@ public:
         specialCount_10->setMaximumSize(QSize(50, 16));
         specialCount_10->setFrameShadow(QFrame::Plain);
         specialCount_10->setSmallDecimalPoint(true);
-        specialCount_10->setNumDigits(6);
+        specialCount_10->setDigitCount(6);
         specialCount_10->setMode(QLCDNumber::Dec);
         specialCount_10->setSegmentStyle(QLCDNumber::Flat);
         specialCount_10->setProperty("value", QVariant(0));
@@ -899,7 +899,7 @@ public:
         specialCount_6->setMaximumSize(QSize(50, 16));
         specialCount_6->setFrameShadow(QFrame::Plain);
         specialCount_6->setSmallDecimalPoint(true);
-        specialCount_6->setNumDigits(6);
+        specialCount_6->setDigitCount(6);
         specialCount_6->setMode(QLCDNumber::Dec);
         specialCount_6->setSegmentStyle(QLCDNumber::Flat);
         specialCount_6->setProperty("value", QVariant(0));
@@ -932,7 +932,7 @@ public:
         specialCount_7->setMaximumSize(QSize(50, 16));
         specialCount_7->setFrameShadow(QFrame::Plain);
         specialCount_7->setSmallDecimalPoint(true);
-        specialCount_7->setNumDigits(6);
+        specialCount_7->setDigitCount(6);
         specialCount_7->setMode(QLCDNumber::Dec);
         specialCount_7->setSegmentStyle(QLCDNumber::Flat);
         specialCount_7->setProperty("value", QVariant(0));
@@ -1016,7 +1016,7 @@ public:
         specialCount_14->setMaximumSize(QSize(50, 16));
         specialCount_14->setFrameShadow(QFrame::Plain);
         specialCount_14->setSmallDecimalPoint(true);
-        specialCount_14->setNumDigits(6);
+        specialCount_14->setDigitCount(6);
         specialCount_14->setMode(QLCDNumber::Dec);
         specialCount_14->setSegmentStyle(QLCDNumber::Flat);
         specialCount_14->setProperty("value", QVariant(0));
@@ -1101,7 +1101,7 @@ public:
         specialCount_9->setMaximumSize(QSize(50, 16));
         specialCount_9->setFrameShadow(QFrame::Plain);
         specialCount_9->setSmallDecimalPoint(true);
-        specialCount_9->setNumDigits(6);
+        specialCount_9->setDigitCount(6);
         specialCount_9->setMode(QLCDNumber::Dec);
         specialCount_9->setSegmentStyle(QLCDNumber::Flat);
         specialCount_9->setProperty("value", QVariant(0));
@@ -1185,7 +1185,7 @@ public:
         specialCount_15->setMaximumSize(QSize(50, 16));
         specialCount_15->setFrameShadow(QFrame::Plain);
         specialCount_15->setSmallDecimalPoint(true);
-        specialCount_15->setNumDigits(6);
+        specialCount_15->setDigitCount(6);
         specialCount_15->setMode(QLCDNumber::Dec);
         specialCount_15->setSegmentStyle(QLCDNumber::Flat);
         specialCount_15->setProperty("value", QVariant(0));
@@ -1217,7 +1217,7 @@ public:
         specialCount_16->setMaximumSize(QSize(50, 16));
         specialCount_16->setFrameShadow(QFrame::Plain);
         specialCount_16->setSmallDecimalPoint(true);
-        specialCount_16->setNumDigits(6);
+        specialCount_16->setDigitCount(6);
         specialCount_16->setMode(QLCDNumber::Dec);
         specialCount_16->setSegmentStyle(QLCDNumber::Flat);
         specialCount_16->setProperty("value", QVariant(0));
@@ -1279,7 +1279,7 @@ public:
         alarmVal0->setMaximumSize(QSize(100, 20));
         alarmVal0->setFrameShadow(QFrame::Plain);
         alarmVal0->setSmallDecimalPoint(true);
-        alarmVal0->setNumDigits(8);
+        alarmVal0->setDigitCount(8);
         alarmVal0->setMode(QLCDNumber::Hex);
         alarmVal0->setSegmentStyle(QLCDNumber::Flat);
         alarmVal0->setProperty("value", QVariant(0));
@@ -1294,7 +1294,7 @@ public:
         alarmVal2->setMaximumSize(QSize(100, 20));
         alarmVal2->setFrameShadow(QFrame::Plain);
         alarmVal2->setSmallDecimalPoint(true);
-        alarmVal2->setNumDigits(8);
+        alarmVal2->setDigitCount(8);
         alarmVal2->setMode(QLCDNumber::Hex);
         alarmVal2->setSegmentStyle(QLCDNumber::Flat);
         alarmVal2->setProperty("value", QVariant(0));
@@ -1329,7 +1329,7 @@ public:
         alarmVal1->setMaximumSize(QSize(100, 20));
         alarmVal1->setFrameShadow(QFrame::Plain);
         alarmVal1->setSmallDecimalPoint(true);
-        alarmVal1->setNumDigits(8);
+        alarmVal1->setDigitCount(8);
         alarmVal1->setMode(QLCDNumber::Hex);
         alarmVal1->setSegmentStyle(QLCDNumber::Flat);
         alarmVal1->setProperty("value", QVariant(0));
@@ -1516,27 +1516,27 @@ public:
 
     void retranslateUi(QMainWindow *mainForm)
     {
-        actionEdit_current_GSS_config_file->setText(QApplication::translate("mainForm", "Edit current MASSIVA config file", 0, QApplication::UnicodeUTF8));
-        actionSend_one_step->setText(QApplication::translate("mainForm", "Send one step", 0, QApplication::UnicodeUTF8));
-        actionSend_several_steps->setText(QApplication::translate("mainForm", "Send several steps", 0, QApplication::UnicodeUTF8));
-        actionReset_GSS->setText(QApplication::translate("mainForm", "Reset MASSIVA", 0, QApplication::UnicodeUTF8));
-        actionSwitch_GSS_config_file->setText(QApplication::translate("mainForm", "Switch MASSIVA config file", 0, QApplication::UnicodeUTF8));
-        actionSwitch_GSS_config_file->setIconText(QApplication::translate("mainForm", "Switch MASSIVA config file", 0, QApplication::UnicodeUTF8));
-        actionUserManual->setText(QApplication::translate("mainForm", "User Manual", 0, QApplication::UnicodeUTF8));
-        actionAbout->setText(QApplication::translate("mainForm", "About", 0, QApplication::UnicodeUTF8));
-        actionPeriodic_TCs->setText(QApplication::translate("mainForm", "Periodic Telecommands", 0, QApplication::UnicodeUTF8));
-        actionPlots->setText(QApplication::translate("mainForm", "Plots", 0, QApplication::UnicodeUTF8));
-        actionSend_single_SpW_TC->setText(QApplication::translate("mainForm", "Send single SpW timecode", 0, QApplication::UnicodeUTF8));
-        actionEnable_periodical_SpW_TC->setText(QApplication::translate("mainForm", "Enable periodical SpW timecodes", 0, QApplication::UnicodeUTF8));
-        actionOpen_Logs_folder->setText(QApplication::translate("mainForm", "Open", 0, QApplication::UnicodeUTF8));
-        actionSelect_Logs_folder->setText(QApplication::translate("mainForm", "Select", 0, QApplication::UnicodeUTF8));
-        barTxStep->setFormat(QApplication::translate("mainForm", "%v / %m", 0, QApplication::UnicodeUTF8));
-        barInput->setFormat(QApplication::translate("mainForm", "%v / %m", 0, QApplication::UnicodeUTF8));
-        barRxStep->setFormat(QApplication::translate("mainForm", "%v / %m", 0, QApplication::UnicodeUTF8));
-        barOutput->setFormat(QApplication::translate("mainForm", "%v / %m", 0, QApplication::UnicodeUTF8));
-        resetGlobalVars->setText(QApplication::translate("mainForm", "Reset global variable", 0, QApplication::UnicodeUTF8));
-        logButton->setText(QApplication::translate("mainForm", "Log", 0, QApplication::UnicodeUTF8));
-        rawLogButton->setText(QApplication::translate("mainForm", "Raw Log", 0, QApplication::UnicodeUTF8));
+        actionEdit_current_GSS_config_file->setText(QApplication::translate("mainForm", "Edit current MASSIVA config file", 0));
+        actionSend_one_step->setText(QApplication::translate("mainForm", "Send one step", 0));
+        actionSend_several_steps->setText(QApplication::translate("mainForm", "Send several steps", 0));
+        actionReset_GSS->setText(QApplication::translate("mainForm", "Reset MASSIVA", 0));
+        actionSwitch_GSS_config_file->setText(QApplication::translate("mainForm", "Switch MASSIVA config file", 0));
+        actionSwitch_GSS_config_file->setIconText(QApplication::translate("mainForm", "Switch MASSIVA config file", 0));
+        actionUserManual->setText(QApplication::translate("mainForm", "User Manual", 0));
+        actionAbout->setText(QApplication::translate("mainForm", "About", 0));
+        actionPeriodic_TCs->setText(QApplication::translate("mainForm", "Periodic Telecommands", 0));
+        actionPlots->setText(QApplication::translate("mainForm", "Plots", 0));
+        actionSend_single_SpW_TC->setText(QApplication::translate("mainForm", "Send single SpW timecode", 0));
+        actionEnable_periodical_SpW_TC->setText(QApplication::translate("mainForm", "Enable periodical SpW timecodes", 0));
+        actionOpen_Logs_folder->setText(QApplication::translate("mainForm", "Open", 0));
+        actionSelect_Logs_folder->setText(QApplication::translate("mainForm", "Select", 0));
+        barTxStep->setFormat(QApplication::translate("mainForm", "%v / %m", 0));
+        barInput->setFormat(QApplication::translate("mainForm", "%v / %m", 0));
+        barRxStep->setFormat(QApplication::translate("mainForm", "%v / %m", 0));
+        barOutput->setFormat(QApplication::translate("mainForm", "%v / %m", 0));
+        resetGlobalVars->setText(QApplication::translate("mainForm", "Reset global variable", 0));
+        logButton->setText(QApplication::translate("mainForm", "Log", 0));
+        rawLogButton->setText(QApplication::translate("mainForm", "Raw Log", 0));
         specialPrint_4->setText(QString());
         specialName_7->setText(QString());
         specialEnabled_3->setText(QString());
@@ -1593,20 +1593,20 @@ public:
         alarmValName_0->setText(QString());
         portsTab->setTabText(portsTab->indexOf(portsTab1), QString());
         specialFieldsTab->setTabText(specialFieldsTab->indexOf(specialFieldsTab1), QString());
-        tpLoadButton->setText(QApplication::translate("mainForm", "Load TP", 0, QApplication::UnicodeUTF8));
-        tpLaunchButton->setText(QApplication::translate("mainForm", "Launch TP", 0, QApplication::UnicodeUTF8));
-        tpLoadLaunchButton->setText(QApplication::translate("mainForm", "Load + Launch", 0, QApplication::UnicodeUTF8));
+        tpLoadButton->setText(QApplication::translate("mainForm", "Load TP", 0));
+        tpLaunchButton->setText(QApplication::translate("mainForm", "Launch TP", 0));
+        tpLoadLaunchButton->setText(QApplication::translate("mainForm", "Load + Launch", 0));
         tpLoadLaunchAllButton->setText(QApplication::translate("mainForm", "Load +\n"
-"Launch ALL", 0, QApplication::UnicodeUTF8));
+"Launch ALL", 0));
         tpLoadLaunchAllStop->setText(QString());
-        cancelButton->setText(QApplication::translate("mainForm", "Cancel", 0, QApplication::UnicodeUTF8));
-        menuGSS->setTitle(QApplication::translate("mainForm", "MASSIVA", 0, QApplication::UnicodeUTF8));
-        menuLogs_folder->setTitle(QApplication::translate("mainForm", "MASSIVA logs folder", 0, QApplication::UnicodeUTF8));
-        menuSend_Raw_Commands->setTitle(QApplication::translate("mainForm", "Send Raw Commands", 0, QApplication::UnicodeUTF8));
-        menuSend_Protocol_Packets->setTitle(QApplication::translate("mainForm", "Send Protocol Packets", 0, QApplication::UnicodeUTF8));
-        menuSend_Steps->setTitle(QApplication::translate("mainForm", "Send Steps", 0, QApplication::UnicodeUTF8));
-        menuHelp->setTitle(QApplication::translate("mainForm", "Help", 0, QApplication::UnicodeUTF8));
-        menuView->setTitle(QApplication::translate("mainForm", "View", 0, QApplication::UnicodeUTF8));
+        cancelButton->setText(QApplication::translate("mainForm", "Cancel", 0));
+        menuGSS->setTitle(QApplication::translate("mainForm", "MASSIVA", 0));
+        menuLogs_folder->setTitle(QApplication::translate("mainForm", "MASSIVA logs folder", 0));
+        menuSend_Raw_Commands->setTitle(QApplication::translate("mainForm", "Send Raw Commands", 0));
+        menuSend_Protocol_Packets->setTitle(QApplication::translate("mainForm", "Send Protocol Packets", 0));
+        menuSend_Steps->setTitle(QApplication::translate("mainForm", "Send Steps", 0));
+        menuHelp->setTitle(QApplication::translate("mainForm", "Help", 0));
+        menuView->setTitle(QApplication::translate("mainForm", "View", 0));
         Q_UNUSED(mainForm);
     } // retranslateUi
 

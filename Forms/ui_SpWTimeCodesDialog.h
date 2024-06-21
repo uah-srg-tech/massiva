@@ -51,7 +51,7 @@ public:
 
     void retranslateUi(QDialog *SpWTimeCodesDialog)
     {
-        SpWTimeCodesDialog->setWindowTitle(QApplication::translate("SpWTimeCodesDialog", "SpW Timecodes", 0, QApplication::UnicodeUTF8));
+        SpWTimeCodesDialog->setWindowTitle(QApplication::translate("SpWTimeCodesDialog", "SpW Timecodes", 0));
     } // retranslateUi
 
 };

@@ -78,8 +78,8 @@ public:
 
     void retranslateUi(QDialog *plotForm)
     {
-        plotForm->setWindowTitle(QApplication::translate("plotForm", "plotForm", 0, QApplication::UnicodeUTF8));
-        plotsTab->setTabText(plotsTab->indexOf(plotTab0), QApplication::translate("plotForm", "0", 0, QApplication::UnicodeUTF8));
+        plotForm->setWindowTitle(QApplication::translate("plotForm", "plotForm", 0));
+        plotsTab->setTabText(plotsTab->indexOf(plotTab0), QApplication::translate("plotForm", "0", 0));
     } // retranslateUi
 
 };

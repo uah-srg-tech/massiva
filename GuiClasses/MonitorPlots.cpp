@@ -155,12 +155,12 @@ int MonitorPlots::CheckApplyMonitors (typeOfGlobalVarRef type,
                 }
                 if(numbers != NULL)
                 {
-                    delete(numbers);
+                    delete[](numbers);
                     numbers = NULL;
                 }
                 if(strings != NULL)
                 {
-                    delete(strings);
+                    delete[](strings);
                     strings = NULL;
                 }
             }

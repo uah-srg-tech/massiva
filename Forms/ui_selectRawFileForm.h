@@ -34,7 +34,6 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSpinBox>
-#else
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -116,15 +115,15 @@ public:
 
     void retranslateUi(QDialog *selectRawFileForm)
     {
-        selectRawFileForm->setWindowTitle(QApplication::translate("selectRawFileForm", "Send Raw Command", 0, QApplication::UnicodeUTF8));
-        selectFileButton->setText(QApplication::translate("selectRawFileForm", "Select File", 0, QApplication::UnicodeUTF8));
-        linesCountLabel->setText(QApplication::translate("selectRawFileForm", "Lines", 0, QApplication::UnicodeUTF8));
-        intervalLabel->setText(QApplication::translate("selectRawFileForm", "Interval (ms)", 0, QApplication::UnicodeUTF8));
-        loopBox->setText(QApplication::translate("selectRawFileForm", "Send in loop", 0, QApplication::UnicodeUTF8));
-        okButton->setText(QApplication::translate("selectRawFileForm", "OK", 0, QApplication::UnicodeUTF8));
-        cancelButton->setText(QApplication::translate("selectRawFileForm", "Cancel", 0, QApplication::UnicodeUTF8));
-        dicBox->setText(QApplication::translate("selectRawFileForm", "Perform DIC", 0, QApplication::UnicodeUTF8));
-        gvBox->setText(QApplication::translate("selectRawFileForm", "Check GlobalVars", 0, QApplication::UnicodeUTF8));
+        selectRawFileForm->setWindowTitle(QApplication::translate("selectRawFileForm", "Send Raw Command", 0));
+        selectFileButton->setText(QApplication::translate("selectRawFileForm", "Select File", 0));
+        linesCountLabel->setText(QApplication::translate("selectRawFileForm", "Lines", 0));
+        intervalLabel->setText(QApplication::translate("selectRawFileForm", "Interval (ms)", 0));
+        loopBox->setText(QApplication::translate("selectRawFileForm", "Send in loop", 0));
+        okButton->setText(QApplication::translate("selectRawFileForm", "OK", 0));
+        cancelButton->setText(QApplication::translate("selectRawFileForm", "Cancel", 0));
+        dicBox->setText(QApplication::translate("selectRawFileForm", "Perform DIC", 0));
+        gvBox->setText(QApplication::translate("selectRawFileForm", "Check GlobalVars", 0));
     } // retranslateUi
 
 };

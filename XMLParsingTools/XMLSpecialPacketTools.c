@@ -393,7 +393,7 @@ int ParseSpecialPacket(xmlNodePtr spPacket_handle, output * specialPacket,
         }
         else if(strncmp((char*)aux_handle->name, "intervalRange", 13) == 0)
         {
-            pSpecialInfo->type = INTERVAL;
+            pSpecialInfo->type = SPECIAL_INTERVAL;
             status = ParseSpecialPacketInterval(aux_handle, pSpecialInfo, attrData);
             if(status != 0)
                 levelError = INTERVAL;

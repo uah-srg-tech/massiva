@@ -68,7 +68,7 @@ void RawSerialRWError(int error, char * msg, int msgSize)
             MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), (LPWSTR) &lpMsgBuf,
             0, NULL);
     if (dwRC && lpMsgBuf)
-        snprintf(msgWin, msgSize-printNumLen, "(%d) %ls", realError, (char*)lpMsgBuf);
+        snprintf(msgWin, msgSize-printNumLen, "(%d) %ls", realError, (wchar_t*)lpMsgBuf);
 #else
     dwRC = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |

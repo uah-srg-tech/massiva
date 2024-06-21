@@ -96,7 +96,7 @@
 /*!
  * Maximum procedures filename length
  */
-#define MAX_PROC_FILE_LEN                                255
+#define MAX_PROC_FILE_LEN                                MAX_MSG_SIZE
 
 /*!
  * Maximum number of procedures

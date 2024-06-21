@@ -51,7 +51,7 @@ public:
 
     void retranslateUi(QDialog *PeriodicTCsDialog)
     {
-        PeriodicTCsDialog->setWindowTitle(QApplication::translate("PeriodicTCsDialog", "Periodic Telecommands", 0, QApplication::UnicodeUTF8));
+        PeriodicTCsDialog->setWindowTitle(QApplication::translate("PeriodicTCsDialog", "Periodic Telecommands", 0));
     } // retranslateUi
 
 };

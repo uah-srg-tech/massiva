@@ -3,7 +3,7 @@
 TEMPLATE = app
 DESTDIR = DebugLinux
 TARGET = massiva
-VERSION = 4.0.0.7
+VERSION = 4.0.0.8
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=

@@ -80,9 +80,9 @@ public:
 
     void retranslateUi(QDialog *resetGlobalVariables)
     {
-        resetGlobalVariables->setWindowTitle(QApplication::translate("resetGlobalVariables", "Reset Global Variable", 0, QApplication::UnicodeUTF8));
-        okButton->setText(QApplication::translate("resetGlobalVariables", "Ok", 0, QApplication::UnicodeUTF8));
-        resetAll->setText(QApplication::translate("resetGlobalVariables", "Reset All", 0, QApplication::UnicodeUTF8));
+        resetGlobalVariables->setWindowTitle(QApplication::translate("resetGlobalVariables", "Reset Global Variable", 0));
+        okButton->setText(QApplication::translate("resetGlobalVariables", "Ok", 0));
+        resetAll->setText(QApplication::translate("resetGlobalVariables", "Reset All", 0));
     } // retranslateUi
 
 };

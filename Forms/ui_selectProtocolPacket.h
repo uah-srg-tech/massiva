@@ -94,9 +94,9 @@ public:
 
     void retranslateUi(QDialog *selectProtocolPacket)
     {
-        selectProtocolPacket->setWindowTitle(QApplication::translate("selectProtocolPacket", "Select Protocol Packet", 0, QApplication::UnicodeUTF8));
-        okButton->setText(QApplication::translate("selectProtocolPacket", "OK", 0, QApplication::UnicodeUTF8));
-        cancelButton->setText(QApplication::translate("selectProtocolPacket", "Cancel", 0, QApplication::UnicodeUTF8));
+        selectProtocolPacket->setWindowTitle(QApplication::translate("selectProtocolPacket", "Select Protocol Packet", 0));
+        okButton->setText(QApplication::translate("selectProtocolPacket", "OK", 0));
+        cancelButton->setText(QApplication::translate("selectProtocolPacket", "Cancel", 0));
     } // retranslateUi
 
 };

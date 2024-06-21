@@ -84,12 +84,12 @@ public:
 
     void retranslateUi(QDialog *AboutDialog)
     {
-        AboutDialog->setWindowTitle(QApplication::translate("AboutDialog", "About", 0, QApplication::UnicodeUTF8));
-        version->setText(QApplication::translate("AboutDialog", "MASSIVA version", 0, QApplication::UnicodeUTF8));
+        AboutDialog->setWindowTitle(QApplication::translate("AboutDialog", "About", 0));
+        version->setText(QApplication::translate("AboutDialog", "MASSIVA version", 0));
         logoUAH->setText(QString());
         logoSRG->setText(QString());
         logoGSS->setText(QString());
-        acronym->setText(QApplication::translate("AboutDialog", "Monitoring and<br/>Analysis<br/>System for<br/>Software<br/>Inspection,<br/>Verification/Validation and<br/>Assessment", 0, QApplication::UnicodeUTF8));
+        acronym->setText(QApplication::translate("AboutDialog", "Monitoring and<br/>Analysis<br/>System for<br/>Software<br/>Inspection,<br/>Verification/Validation and<br/>Assessment", 0));
     } // retranslateUi
 
 };

@@ -299,7 +299,7 @@ void DisplayTCPSocketError(int error, char * msg, int msgSize)
             0, NULL);
     if (dwRC && lpMsgBuf)
         snprintf(&msg[msgLen], msgSize-msgLen, "(%d) %ls", errorNumber,
-                (char*)lpMsgBuf);
+                (wchar_t*)lpMsgBuf);
 #else
     dwRC = FormatMessage(
             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |

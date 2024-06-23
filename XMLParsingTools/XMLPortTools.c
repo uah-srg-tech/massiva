@@ -13,6 +13,7 @@
  *
  */
 #include <stdio.h>							/* sprintf */
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"						/* GetXMLAttributeValueByName, ... */
 #include "../definitions.h"					/* portConfig, MAX_MSG_SIZE */

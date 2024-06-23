@@ -211,7 +211,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.8</version>
+        <version>4.1.0.0</version>
         <modules>core gui widgets opengl</modules>
         <defs>
           <Elem>RESOURCES += icons.qrc logos.qrc</Elem>
@@ -637,7 +637,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.8</version>
+        <version>4.1.0.0</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets opengl</modules>
         <defs>
@@ -690,6 +690,12 @@
         <packType>Tar</packType>
         <additionalOptions>-v</additionalOptions>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -3697,7 +3703,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva_no_spw</target>
-        <version>4.0.0.8</version>
+        <version>4.1.0.0</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets opengl</modules>
         <defs>
@@ -3742,6 +3748,12 @@
         <packType>Tar</packType>
         <additionalOptions>-v</additionalOptions>
         <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
+                            from="${OUTPUT_PATH}.exe"
+                            perm="755"
+                            owner="root"
+                            group="bin"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}.exe"
                             from="${OUTPUT_PATH}.exe"
@@ -6748,7 +6760,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.8</version>
+        <version>4.1.0.0</version>
         <modules>core gui widgets</modules>
         <defs>
           <Elem>RESOURCES += icons.qrc logos.qrc</Elem>
@@ -7168,7 +7180,7 @@
       <qt>
         <destdir>${CND_CONF}</destdir>
         <target>massiva</target>
-        <version>4.0.0.8</version>
+        <version>4.1.0.0</version>
         <buildMode>1</buildMode>
         <modules>core gui widgets</modules>
         <defs>

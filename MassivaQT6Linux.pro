@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = massiva
-VERSION = 4.0.0.5
+VERSION = 4.1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
@@ -29,3 +29,9 @@ RC_FILE = icon.rc
 
 unix:LIBS += -lxml2
 unix:INCLUDEPATH += /usr/include/libxml2
+
+unix:DEFINES += PLOTS
+unix:CONFIG += qwt
+#unix:LIBS += /usr/local/qwt-6.3.0/lib/libqwt.so
+unix:LIBS += -Wl,-rpath,/usr/local/qwt-6.3.0/lib/ /usr/local/qwt-6.3.0/lib/libqwt.so
+unix:INCLUDEPATH += /usr/local/qwt-6.3.0/include/

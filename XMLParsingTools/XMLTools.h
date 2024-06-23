@@ -15,8 +15,8 @@
 #ifndef __XMLTools_H__
 #define __XMLTools_H__
 
-#include <libxml/xmlreader.h>
 #include <libxml/xpath.h>
+#include <libxml/xmlreader.h>
 
 #ifdef __cplusplus
 extern "C" {

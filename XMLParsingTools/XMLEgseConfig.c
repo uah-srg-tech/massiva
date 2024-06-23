@@ -13,6 +13,7 @@
  *
  */
 #include <libxml/xmlreader.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include "XMLTools.h"				/* GetXMLValueByTag, ... */

@@ -13,6 +13,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"			/* GetXMLAttributeByName, ... */
 #include "XMLTPStepTools.h"		/* ParseStep */
@@ -58,8 +59,7 @@ int ParseTestProcedure(const char * filename, gss_config * config,
         return TP_FILE_NOT_FOUND;
     }
     /* Open Document */
-    doc = xmlReadFile(filenameError, NULL, 0);
-    //doc = xmlParseFile(fullPath);
+    doc = xmlParseFile(fullPath);
     if (doc == NULL)
     {
         return TP_PARSING_ERROR;

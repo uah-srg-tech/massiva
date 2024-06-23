@@ -14,6 +14,7 @@
  */
 #pragma GCC diagnostic ignored "-Wunused-result"
 
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"			/* GetXMLValueByTag, ... */
 #include "XMLExportSettingTools.h"	/* CreateExportSetting */

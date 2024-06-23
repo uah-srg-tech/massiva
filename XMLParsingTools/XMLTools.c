@@ -13,6 +13,7 @@
  *
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"
 
@@ -546,7 +547,7 @@ int TryGetXMLOnlyChildAttributeValueByName(xmlNodePtr element, const char * tag,
     {
         if(status == ELEMENT_NOT_FOUND_TAG)
         {
-            strncpy(value, "DEFAULT", 7);
+            snprintf(value, 7, "DEFAULT");
             status = 0;
         }
         return status;
@@ -566,7 +567,7 @@ int TryGetXMLAttributeValueByName(xmlNodePtr element, unsigned int idx,
     {
         if(status == ATTRIBUTE_NOT_FOUND_INDEX)
         {
-            strncpy(value, "DEFAULT", 7);
+            snprintf(value, 7, "DEFAULT");
             status = 0;
         }
         return status;

@@ -12,6 +12,7 @@
  * For further information, please visit http://srg.aut.uah.es
  *
  */
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"			/* GetXMLValueByTag, ... */
 #include "XMLInterfaceTools.h"		/* ParseInterface */

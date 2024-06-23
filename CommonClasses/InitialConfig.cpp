@@ -256,7 +256,7 @@ int InitialConfig::ConfigWorkspaceParseIni(char * auxMsg, unsigned int auxMsgLen
         if((fp = fopen(auxMsg, "r")) == NULL)
         {
             snprintf(auxMsg, auxMsgLen, "Config file \"%s\" not found neither "
-                    "at \"%s\" nor at \"%s\"", gssIniConfigFile,
+                    "at \"%s\" nor at \"%s\". Please create file", gssIniConfigFile,
                     workspace_dir, gss_dir);
             return -1;
         }

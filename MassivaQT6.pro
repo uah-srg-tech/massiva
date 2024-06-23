@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = massiva
-VERSION = 4.0.0.5
+VERSION = 4.1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
@@ -27,8 +27,8 @@ RESOURCES += icons.qrc logos.qrc
 UI_DIR += Forms
 RC_FILE = icon.rc
 
-win32:LIBS += -L$$PWD/../../QtInstall/libxml2-v2.13.1/.libs -lxml2
-win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-v2.13.1/include
-win32:DEPENDPATH += $$PWD/../../QtInstall/libxml2-v2.13.1/include
+#win32:LIBS += -L$$PWD/../../QtInstall/libxml2-2.9.14_orig/.libs -lxml2
+#win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-2.9.14_orig/include
 
-unix:LIBS += -lxml2
+win32:LIBS += -L$$PWD/../../QtInstall/libxml2-v2.12.8/win32/bin.mingw -lxml2
+win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-v2.12.8/include

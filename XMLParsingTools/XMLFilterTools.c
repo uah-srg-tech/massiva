@@ -18,6 +18,7 @@
 #endif
 
 #include <inttypes.h>
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"				/* GetXMLValueByTag, ... */
 #include "XMLFormatTools.h"			/* getFormatFromXtext */

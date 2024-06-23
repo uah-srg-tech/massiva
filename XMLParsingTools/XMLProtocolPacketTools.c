@@ -12,7 +12,7 @@
  * For further information, please visit http://srg.aut.uah.es
  *
  */
-#include <libxml/xmlreader.h>
+#include <stdlib.h>
 #include <string.h>
 #include "XMLTools.h"					/* GetXMLAttributeValueByName, ... */
 #include "XMLFormatTools.h"				/* CreateFormatArray */

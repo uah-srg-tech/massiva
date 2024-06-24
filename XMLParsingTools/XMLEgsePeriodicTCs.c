@@ -325,19 +325,19 @@ void DisplayParsePeriodicTCError (int status, int errorPeriodicTC, char * msg,
             switch(status)
             {
                 case WRONG_IFREF:
-                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic "
-                            "TC %d: Referenced port not configured",
+                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic TC "
+                            "%d: Referenced port not configured",
                             errorPeriodicTC);
                     break;
                     
                 case WRONG_PERIODIC_TC_TAG:
-                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic "
-                            "TC %d: Wrong tag", errorPeriodicTC);
+                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic TC "
+                            "%d: Wrong tag", errorPeriodicTC);
                     break;
                     
                 case WRONG_PERIODIC_TC_LEVEL:
-                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic "
-                            "TC %d: Wrong level %d", errorPeriodicTC, 
+                    snprintf(&msg[len], maxMsgSize-len, "Error in periodic TC "
+                            "%d: Wrong level %d", errorPeriodicTC,
                             errorNumbers);
                     break;
 

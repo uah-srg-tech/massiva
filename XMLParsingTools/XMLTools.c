@@ -547,7 +547,7 @@ int TryGetXMLOnlyChildAttributeValueByName(xmlNodePtr element, const char * tag,
     {
         if(status == ELEMENT_NOT_FOUND_TAG)
         {
-            snprintf(value, 7, "DEFAULT");
+            snprintf(value, maxSize, "DEFAULT");
             status = 0;
         }
         return status;
@@ -567,7 +567,7 @@ int TryGetXMLAttributeValueByName(xmlNodePtr element, unsigned int idx,
     {
         if(status == ATTRIBUTE_NOT_FOUND_INDEX)
         {
-            snprintf(value, 7, "DEFAULT");
+            snprintf(value, maxSize, "DEFAULT");
             status = 0;
         }
         return status;

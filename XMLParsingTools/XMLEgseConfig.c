@@ -395,7 +395,7 @@ void UnconfigEgseConfig(gss_config * pConfig)
                     if(pConfig->levels[i][j].in.crcTCFieldRefs[k] != NULL)
                         free(pConfig->levels[i][j].in.crcTCFieldRefs[k]);
                 }
-                free(pConfig->levels[i][j].in.crcTCFieldRefs);
+                //free(pConfig->levels[i][j].in.crcTCFieldRefs);
                 pConfig->levels[i][j].in.numberOfFDICTCFields = 0;
             }
             if(pConfig->levels[i][j].in.numberOfcrcTCFields != NULL)
@@ -424,7 +424,7 @@ void UnconfigEgseConfig(gss_config * pConfig)
                     if(pConfig->levels[i][j].out.crcTMFieldRefs[k] != NULL)
                         free(pConfig->levels[i][j].out.crcTMFieldRefs[k]);
                 }
-                free(pConfig->levels[i][j].out.crcTMFieldRefs);
+                //free(pConfig->levels[i][j].out.crcTMFieldRefs);
                 pConfig->levels[i][j].out.numberOfFDICTMFields = 0;
             }
             if(pConfig->levels[i][j].out.numberOfcrcTMFields != NULL)

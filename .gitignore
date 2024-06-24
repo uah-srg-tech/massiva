@@ -7,8 +7,8 @@
 /logs
 /build
 *exe
-/Forms/ui_*.h
 moc*.cpp
 qrc*.cpp
 /object_script.*
 /gss_config.ini
+*pro.user

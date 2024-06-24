@@ -16,7 +16,6 @@ UI_DIR =
 QMAKE_CC = gcc
 QMAKE_CXX = g++
 DEFINES += LIBXML_STATIC NOT_PCI_DEV NOT_MK2_DEV NOT_PCI_DEV NOT_USB_DEV
-win32:LIBS += -liconv -lws2_32 -lpthread
 equals(QT_MAJOR_VERSION, 4) {
 QMAKE_CXXFLAGS += -std=c++11
 }
@@ -27,8 +26,17 @@ RESOURCES += icons.qrc logos.qrc
 UI_DIR += Forms
 RC_FILE = icon.rc
 
-#win32:LIBS += -L$$PWD/../../QtInstall/libxml2-2.9.14_orig/.libs -lxml2
-#win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-2.9.14_orig/include
+win32:LIBS += -liconv -lws2_32 -lpthread
+win32:LIBS += -L$$PWD/../libxml2-v2.12.8/win32/bin.mingw -lxml2
+win32:INCLUDEPATH += $$PWD/../libxml2-v2.12.8/include
 
-win32:LIBS += -L$$PWD/../../QtInstall/libxml2-v2.12.8/win32/bin.mingw -lxml2
-win32:INCLUDEPATH += $$PWD/../../QtInstall/libxml2-v2.12.8/include
+unix:LIBS += -lxml2
+unix:INCLUDEPATH += /usr/include/libxml2
+
+DEFINES += PLOTS
+CONFIG += qwt
+unix:LIBS += -Wl,-rpath,/usr/local/qwt-6.3.0/lib/ /usr/local/qwt-6.3.0/lib/libqwt.so
+unix:INCLUDEPATH += /usr/local/qwt-6.3.0/include/
+								   
+win32:LIBS += -Wl,-rpath,C:\Qwt-6.3.0\qwt-6.3.0\lib\ C:\Qwt-6.3.0\lib\libqwt.a
+win32:INCLUDEPATH += C:\Qwt-6.3.0\include/

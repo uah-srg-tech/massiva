@@ -28,11 +28,11 @@
 #include <cstring>			/* memset, strncpy */
 #include <unistd.h>			/* getcwd, chdir */
 #include <fcntl.h>			/* O_RDWR  */
-#include <sys/stat.h>			/* S_IREAD, S_IWRITE */
+#include <sys/stat.h>		/* S_IREAD, S_IWRITE */
 #include <stdint.h>			/* uint32_t */
 #include <time.h>
 #include <errno.h>
-#include <string>
+#include <dirent.h>
 #include "InitialConfig.h"
 
 #define DEFAULT_GSS_CONFIG_INI		"gss_config.ini"
@@ -159,10 +159,10 @@ bool InitialConfig::SetFileLog(const char * newFile)
     if(chdir(gss_dir) != 0)
     {
 #ifdef NO_QT
-        printf("INI file not found");
+        printf("MASSIVA folder not found");
 #else
         QMessageBox::information(0, "Error",
-                QObject::tr("INI folder not found"));
+                QObject::tr("MASSIVA folder not found"));
 #endif
         return false;
     }
@@ -231,56 +231,91 @@ bool InitialConfig::SetFileLog(const char * newFile)
     return true;
 }
 
-int InitialConfig::ConfigWorkspaceParseIni(char * auxMsg, unsigned int auxMsgLen)
+int InitialConfig::FindIni(char * auxMsg, unsigned int auxMsgLen)
 {
-    int status = 0;
-    
-    /* first look for gss_config.ini file in current folder */
+    /* first look for gss_config.ini file in MASSIVA executable folder */
+    if(chdir(exe_path) != 0)
+    {
+        snprintf(auxMsg, auxMsgLen, "MASSIVA executable folder not accesible");
+        return -1;
+    }
+
     FILE * fp = NULL;
     if((fp = fopen(gssIniConfigFile, "r")) == NULL)
     {
-        /* if gss_config.ini is not found try in home folder */
-        memset(workspace_dir, 0, strMaxLen);
-        strncpy(workspace_dir, gss_dir, strMaxLen);
-        /* workspace_dir is used as first wrong dir, as it isn't used yet */
-        
-#if defined (_WIN32) || defined (__CYGWIN__)
-        snprintf(gss_dir, strMaxLen, "%s%s\\%s", getenv("HOMEDRIVE"),
-                getenv("HOMEPATH"), HOME_GSS_FOLDER);
-#else
-        snprintf(gss_dir, strMaxLen, "%s/%s", getenv("HOME"), HOME_GSS_FOLDER);
-#endif
-        snprintf(auxMsg, auxMsgLen, "%s%c%s", gss_dir, slashChar, gssIniConfigFile);
-        
         /* look for check gss_config.ini file in home folder */
+        snprintf(auxMsg, auxMsgLen, "%s%s%c%s", home_path, HOME_GSS_FOLDER, slashChar, gssIniConfigFile);
         if((fp = fopen(auxMsg, "r")) == NULL)
         {
-            snprintf(auxMsg, auxMsgLen, "Config file \"%s\" not found neither "
-                    "at \"%s\" nor at \"%s\". Please create file", gssIniConfigFile,
-                    workspace_dir, gss_dir);
-            return -1;
+            /* if not found, try to create folder and file in home */
+            if(chdir(home_path) != 0)
+            {
+                snprintf(auxMsg, auxMsgLen, "home folder not accesible");
+                return -1;
+            }
+
+            DIR *dir;
+            if ((dir = opendir (HOME_GSS_FOLDER)) == NULL) {
+                if (ENOENT == errno) {
+                    int status = 0;
+    #ifdef _WIN32
+                    if((status = mkdir(HOME_GSS_FOLDER)) != 0)
+    #else
+                    if((status = mkdir(HOME_GSS_FOLDER, 0777)) != 0)
+    #endif
+                    {
+                        snprintf(auxMsg, auxMsgLen,
+                                 "Folder \"%s\" can't be created at \"%s\": %s",
+                                 HOME_GSS_FOLDER, gss_dir, strerror(errno));
+                        return -1;
+                    }
+                }
+                else
+                {
+                    snprintf(auxMsg, auxMsgLen,
+                             "Folder \"%s\" can't be accesed at \"%s\": %s",
+                             HOME_GSS_FOLDER, gss_dir, strerror(errno));
+                    return -1;
+                }
+            }
+            if((fp = fopen(auxMsg, "w")) == NULL)
+            {
+                snprintf(auxMsg, auxMsgLen,
+                         "File \"%s\" can't be created at \"%s%c%s\"",
+                         gssIniConfigFile, gss_dir, slashChar, HOME_GSS_FOLDER);
+                return -1;
+            }
+            fclose(fp);
+            snprintf(gss_dir, strMaxLen, "%s%s", home_path, HOME_GSS_FOLDER);
         }
         if(chdir(gss_dir) != 0)
         {
-            snprintf(auxMsg, auxMsgLen, "INI folder not found");
+            snprintf(auxMsg, auxMsgLen, "MASSIVA folder not found");
             return -1;
         }
-        
     }
-        
-    /* check if folder is writable for creating logs */
-    if((status = CheckGssFolderWritable(auxMsg, auxMsgLen)) != 0)
-        return status;
-    
+    return 0;
+}
+
+int InitialConfig::ConfigWorkspaceParseIni(char * auxMsg, unsigned int auxMsgLen)
+{
+    FILE * fp = NULL;
+
     /* parse gss_config.ini file */
+    if((fp = fopen(gssIniConfigFile, "r")) == NULL)
+    {
+        snprintf(auxMsg, auxMsgLen, "INI file not found");
+        return -1;
+    }
     memset(workspace_dir, 0, strMaxLen);
     fseek(fp, 0, SEEK_END);/* seek the end of file */
     int length = ftell(fp);
     rewind(fp);
+
     if(fgets(workspace_dir, strMaxLen, fp) == NULL)
     {
         snprintf(auxMsg, auxMsgLen,
-                "Error while getting folder from \"%s%c%s\"", gss_dir,
+                "Error while getting workspace folder from \"%s%c%s\"", gss_dir,
                 slashChar, gssIniConfigFile);
         fclose(fp);
         return -1;
@@ -358,21 +393,18 @@ int InitialConfig::ConfigWorkspaceCommandOption(char * auxMsg,
         /* else copy it as the future previous value */
         snprintf(auxMsg, auxMsgLen, "%s", configXMLFileCL);
     }
-    
-    int status = 0;
-    
+
     memset(gss_dir, 0, strMaxLen);
-    char * getcwd_ret = getcwd(gss_dir, strMaxLen);
+    char * getcwd_ret = getcwd(exe_path, strMaxLen);
     if(getcwd_ret == NULL)
     {
-        snprintf(auxMsg, auxMsgLen, "Error getting current MASSIVA directory "
-                "\"%s\": %s", gss_dir, strerror(errno));
+        snprintf(auxMsg, auxMsgLen,
+                 "Error getting MASSIVA executable directory \"%s\": %s",
+                 exe_path, strerror(errno));
         return -1;
     }
-    
-    /* check if folder is writable for creating logs */
-    if((status = CheckGssFolderWritable(auxMsg, auxMsgLen)) != 0)
-        return status;
+    memset(exe_path, 0, strMaxLen);
+    strncpy(gss_dir, exe_path, strMaxLen);
     
     /* now parse workspace from command-line */
     /* get last / to split xml config path and file */
@@ -382,8 +414,11 @@ int InitialConfig::ConfigWorkspaceCommandOption(char * auxMsg,
         xmlFileInit = strrchr(auxMsg, '/');
     if(xmlFileInit == NULL)
     {
-        snprintf(auxMsg, auxMsgLen, "Config parameter \"%s\" must be located "
-                "inside a folder", auxMsg);
+        strncpy(gss_dir, auxMsg, strMaxLen);
+        snprintf(auxMsg, auxMsgLen,
+            "Config parameter \"%s\" must be located inside a folder",
+            gss_dir);
+        strncpy(gss_dir, exe_path, strMaxLen);
         return -1;
     }
     xmlFileInit++;
@@ -438,15 +473,14 @@ int InitialConfig::UpdateConfigGSS(char * newConfigPath,
         /* go to GSS dir and open gss_config.ini */
         if(chdir(gss_dir) != 0)
         {
-            snprintf(newConfigPath, newConfigPathMaxLen, "Ini folder not found");
+            snprintf(newConfigPath, newConfigPathMaxLen, "MASSIVA folder not found");
             return -1;
         }
         /* check if there is a 3rd line (logs folder )*/
         FILE * fp = fopen(gssIniConfigFile, "r");
         if(fp == NULL)
         {
-            snprintf(newConfigPath, newConfigPathMaxLen, "Ini file not found");
-            //snprintf(newConfigPath, newConfigPathLen, "INI file not found");
+            snprintf(newConfigPath, newConfigPathMaxLen, "MASSIVA file not found");
             return -1;
         }
         fseek(fp, 0, SEEK_END);/* seek to end of file */
@@ -468,7 +502,7 @@ int InitialConfig::UpdateConfigGSS(char * newConfigPath,
         fp = fopen(gssIniConfigFile, "w");
         if(fp == NULL)
         {
-            snprintf(newConfigPath, newConfigPathMaxLen, "Ini file not editable");
+            snprintf(newConfigPath, newConfigPathMaxLen, "INI file not editable");
             return -1;
         }
     #ifdef _WIN32
@@ -666,43 +700,48 @@ int InitialConfig::SanitizeWorkspaceFile(char * auxMsg, unsigned int auxMsgLen)
 
 int InitialConfig::CheckGssFolderWritable(char * auxMsg, unsigned int auxMsgLen)
 {
-    /* first check if current folder is writable
-     * if not, try in home */
-    memset(gss_dir, 0, strMaxLen);
-    char * getcwd_ret = getcwd(gss_dir, strMaxLen);
+    memset(exe_path, 0, strMaxLen);
+    char * getcwd_ret = getcwd(exe_path, strMaxLen);
     if(getcwd_ret == NULL)
     {
-        snprintf(auxMsg, auxMsgLen, "Error getting current MASSSIVA directory "
-                "\"%s\": %s", gss_dir, strerror(errno));
+        snprintf(auxMsg, auxMsgLen,
+                 "Error getting MASSIVA executable directory \"%s\": %s",
+                 exe_path, strerror(errno));
         return -1;
     }
+
+    memset(home_path, 0, strMaxLen);
+#if defined (_WIN32) || defined (__CYGWIN__)
+    snprintf(home_path, strMaxLen, "%s%s\\",
+             getenv("HOMEDRIVE"), getenv("HOMEPATH"));
+#else
+    snprintf(home_path, strMaxLen, "%s/", getenv("HOME"));
+#endif
+    snprintf(gss_dir, strMaxLen, "%s%s", home_path, HOME_GSS_FOLDER);
+
     if(access(gss_dir, W_OK | R_OK) != 0)
     {
-        /* if current folder is not readable and writable try in home */
-        memset(workspace_dir, 0, strMaxLen);
-        strncpy(workspace_dir, gss_dir, strMaxLen);
-        /* workspace_dir is used as first wrong dir, as it isn't used yet */
-        
-#if defined (_WIN32) || defined (__CYGWIN__)
-        snprintf(gss_dir, strMaxLen, "%s%s\\%s", getenv("HOMEDRIVE"),
-                getenv("HOMEPATH"), HOME_GSS_FOLDER);
-#else
-        snprintf(gss_dir, strMaxLen, "%s/%s", getenv("HOME"), HOME_GSS_FOLDER);
-#endif
-        if(access(gss_dir, W_OK | R_OK) != 0)
+        /* if home folder is not readable and writable try gss exe folder  */
+        char wrongHomeDir[strMaxLen];
+        memset(wrongHomeDir, 0, strMaxLen);
+        strncpy(wrongHomeDir, gss_dir, strMaxLen);
+
+        if(access(exe_path, W_OK | R_OK) != 0)
         {
-            snprintf(auxMsg, auxMsgLen, "Nor current folder \"%s\" neither "
-                    "home at \"%s\" are writable folders",
-                    workspace_dir, gss_dir);
+            snprintf(auxMsg, auxMsgLen,
+                     "No writable folder found: home \"%s\", exe: \"%s\"",
+                     wrongHomeDir, exe_path);
             return -1;
         }
-        if(chdir(gss_dir) != 0)
-        {
-            snprintf(auxMsg, auxMsgLen, "Error while opening \"%s\" folder",
-                    gss_dir);
-            return -1;
-        }
-        strncpy(gss_dir_last, gss_dir, strMaxLen);
+        /* if found and accesible, gss_dir is exe_path */
+        strncpy(gss_dir, exe_path, strMaxLen);
     }
+    if(chdir(gss_dir) != 0)
+    {
+        snprintf(auxMsg, auxMsgLen, "Error while opening \"%s\" folder",
+                 gss_dir);
+        return -1;
+    }
+    strncpy(gss_dir_last, gss_dir, strMaxLen);
     return 0;
 }

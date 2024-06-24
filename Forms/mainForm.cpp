@@ -604,8 +604,8 @@ void mainForm::proceduresListDoubleClickedSlot(int row, int column)
 
 void mainForm::resetGSS()
 {
-    pInitialConfig->SetCloseGss(false);
     QApplication::quit();
+    pInitialConfig->SetCloseGss(false);
 }
 
 void mainForm::openCurrentLogFolder()

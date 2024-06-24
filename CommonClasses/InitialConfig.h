@@ -32,12 +32,14 @@ public:
     static const unsigned int strMaxLen = 400;
     
     InitialConfig();
+    int CheckGssFolderWritable(char * auxMsg, unsigned int auxMsgLen);
     void SetCloseGss(bool value);
     bool GetCloseGss();
     const char * GetFile(enum dirType type);
     bool SetFile(enum dirType type, const char * newFile);
     void SetFileLast(char * pFile, const char * newFile);
     bool SetFileLog(const char * newFile);
+    int FindIni(char * auxMsg, unsigned int auxMsgLen);
     int ConfigWorkspaceParseIni(char * auxMsg, unsigned int auxMsgLen);
     int ConfigWorkspaceCommandOption(char * auxMsg, unsigned int auxMsgLen);
     void ShowConfigFile(bool isIniFile);
@@ -48,7 +50,6 @@ public:
     
 private:
     int SanitizeWorkspaceFile(char * auxMsg, unsigned int auxMsgLen);
-    int CheckGssFolderWritable(char * auxMsg, unsigned int auxMsgLen);
     
 #ifdef _WIN32
     static const char slashChar = '\\';
@@ -61,7 +62,10 @@ private:
     char gssIniConfigFile[strMaxLen];
     char gssConfigFile[strMaxLen];
     char currentLogFolderName[strMaxLen];
-    
+
+    char exe_path[strMaxLen];
+    char home_path[strMaxLen];
+
     char gss_dir[strMaxLen];
     char workspace_dir[strMaxLen];
     char workspace_dir_full[strMaxLen];

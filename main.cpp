@@ -37,7 +37,6 @@
 #include "TesterClasses/TestManager.h"
 #include "GuiClasses/TestButtons.h"
 #include "TesterClasses/EnqueueWorker.h"
-#include "TesterClasses/RxPacket.h"
 #include "TesterClasses/PeriodicMonitor.h"
 #include "TesterClasses/AutoTester.h"
 
@@ -229,16 +228,28 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
                     false, pMainGui, pInitialConfig);
         }
     }
+    /* first of all, try if there is a writable folder */
+    if((status = pInitialConfig->CheckGssFolderWritable(auxMsg, strMaxLen)) != 0)
+    {
+        return MessageBoxErrorIni("Error in writable folder", auxMsg, false,
+            pMainGui, pInitialConfig);
+    }
+
     /* if any, in auxMsg should be the XML configuration file */
     if(auxMsg[0] == 0)
     {
-        /* no XML configuration file as parameter: parse INI */
-        if((status = pInitialConfig->ConfigWorkspaceParseIni(auxMsg,
-                strMaxLen)) != 0)
+        /* no XML configuration file as parameter 1) find INI */
+        if((status = pInitialConfig->FindIni(auxMsg, strMaxLen)) != 0)
+        {
+            return MessageBoxErrorIni("Error finding INI file", auxMsg, false,
+                                      pMainGui, pInitialConfig);
+        }
+        /* no XML configuration file as parameter 2) parse INI */
+        if((status = pInitialConfig->ConfigWorkspaceParseIni(auxMsg,                                                              strMaxLen)) != 0)
         {
             //if any error rises it will be at configIni
             return MessageBoxErrorIni("Error parsing INI file", auxMsg, false,
-                    pMainGui, pInitialConfig);
+                                      pMainGui, pInitialConfig);
         }
     }
     else
@@ -271,7 +282,7 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
     if(chdir(pInitialConfig->GetFile(GSS)) != 0)
     {
         snprintf(auxMsg, strMaxLen,
-                "Error selecting MASSIVA directory \"%s\"",
+                "Error selecting MASSIVA working directory \"%s\"",
                 pInitialConfig->GetFile(GSS));
         return MessageBoxErrorIni("Error changing directory", auxMsg, false,
                 pMainGui, pInitialConfig);

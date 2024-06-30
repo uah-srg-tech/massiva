@@ -20,8 +20,6 @@
 #include "../CheckTools/ExportSettingTools.h"
 #include "../CheckTools/CheckFormatTools.h"
 
-//#define PRINT_PACKET
-
 PrepareInput::PrepareInput(gssStructs * origGssStruct)
 {
     pGssStruct = origGssStruct;
@@ -156,19 +154,6 @@ int PrepareInput::prepare(unsigned char tcBuffer[MAX_LEVELS][MAX_PACKET_SIZE+MAX
                 return status;
             }
 	}
-
-#ifdef PRINT_PACKET
-        unsigned int aux_print = 0;
-        char dbg_print[length*2+1];
-        printf("%u:\t", curLevel-1);
-        for(aux_print=0; aux_print<length; ++aux_print)
-        {
-            printf("%02X", (char)targetBuffer[aux_print]);
-            snprintf(&dbg_print[aux_print*2], 3, "%02X", (char)targetBuffer[aux_print]);
-        }
-        printf("\n\n");
-        fflush(stdout);
-#endif
     }
     if(portPhyHeaderOffsetTC)
     {

@@ -32,7 +32,6 @@
 #define DELAY_MS					20
 
 pthread_mutex_t ptclMutex[MAX_INTERFACES];
-int dbgReceivedPackets = 0;
 
 static unsigned int TryGetPacketHeaderLenBytes(const unsigned char * buffer,
 	unsigned int initialPointer, unsigned int bufferMaxSize,
@@ -110,7 +109,6 @@ int ReadRawProtocol(unsigned char * packet, unsigned int * pLength,
      * and let upper process deal with it */
     pPtcl->buffer.head = (pPtcl->buffer.head+length)%PTCL_BUFFER_SIZE;
     *pLength = length;
-    dbgReceivedPackets++;
     return length;
 }
 

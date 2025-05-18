@@ -21,7 +21,6 @@
 #include "../CommonClasses/Logs.h"
 #include "../GuiClasses/RxTxInfo.h"
 #include "../GuiClasses/MonitorPlots.h"
-#include "../Forms/SpWTimeCodesDialog.h"
 
 class selectRawFileForm : public QDialog
 {

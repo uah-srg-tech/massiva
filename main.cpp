@@ -40,7 +40,7 @@
 #include "TesterClasses/PeriodicMonitor.h"
 #include "TesterClasses/AutoTester.h"
 
-#define GSS_VERSION     "MASSIVA 4.0.0.8"
+#define GSS_VERSION     "MASSIVA 4.1.0.0"
 #define GSS_TITLE_BAR   "MASSIVA"
 
 using namespace std;
@@ -245,7 +245,8 @@ static int Init (int argc, char *argv[], pthread_t * pRs232_rx_thread,
                                       pMainGui, pInitialConfig);
         }
         /* no XML configuration file as parameter 2) parse INI */
-        if((status = pInitialConfig->ConfigWorkspaceParseIni(auxMsg,                                                              strMaxLen)) != 0)
+        if((status = pInitialConfig->ConfigWorkspaceParseIni(auxMsg,
+                strMaxLen)) != 0)
         {
             //if any error rises it will be at configIni
             return MessageBoxErrorIni("Error parsing INI file", auxMsg, false,

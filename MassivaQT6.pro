@@ -1,8 +1,6 @@
 TEMPLATE = app
 TARGET = massiva
 VERSION = 4.1.0.0
-CONFIG -= debug_and_release app_bundle lib_bundle
-CONFIG += debug 
 PKGCONFIG +=
 QT = core gui widgets opengl
 SOURCES += CheckTools/CheckFilterTools.c CheckTools/CheckFormatTools.c CheckTools/ExportSettingTools.c CheckTools/ImportFields.c CheckTools/ProcessPacket.cpp CommonClasses/InitialConfig.cpp CommonClasses/Logs.cpp CommonClasses/MathTools.cpp CommonClasses/gssStructs.cpp CommonTools/GetSetFieldTools.c CommonTools/crc16.c Forms/AboutDialog.cpp Forms/PeriodicTCsDialog.cpp Forms/SpWTimeCodesDialog.cpp Forms/mainForm.cpp Forms/plotForm.cpp Forms/resetGlobalVariables.cpp Forms/selectProtocolPacket.cpp Forms/selectRawFileForm.cpp GuiClasses/CheckSpecialPeriods.cpp GuiClasses/DoubleClickButton.cpp GuiClasses/MonitorPlots.cpp GuiClasses/ProgressBarsWrapper.cpp GuiClasses/RxTxInfo.cpp GuiClasses/SpecialPackets.cpp GuiClasses/TestButtons.cpp PortTools/configScenario.c PortTools/configSerial.c PortTools/configSpW.c PortTools/configSpWpci.c PortTools/configSpWusb.c PortTools/configSpWusbmk2.c PortTools/configTCPSocket.c PortTools/configUDPSocket.c PortTools/raw.c PortTools/rawProtocol.c PortTools/rawSerial.c PortTools/rawSpWmk2.c PortTools/rawSpWpci.c PortTools/rawSpWusb.c PortTools/rawTCPSocket.c PortTools/rawUDPSocket.c TesterClasses/AutoTester.cpp TesterClasses/EnqueueWorker.cpp TesterClasses/PeriodicMonitor.cpp TesterClasses/PeriodicTC.cpp TesterClasses/PrepareInput.cpp TesterClasses/RxPacket.cpp TesterClasses/TPWorker.cpp TesterClasses/TestManager.cpp TesterClasses/TxStep.cpp TesterClasses/sendRaw.cpp XMLParsingTools/XMLEgseConfig.c XMLParsingTools/XMLEgseConfigFileParser.c XMLParsingTools/XMLEgseConfigOptions.c XMLParsingTools/XMLEgseGlobalVars.c XMLParsingTools/XMLEgseMonitors.c XMLParsingTools/XMLEgsePeriodicTCs.c XMLParsingTools/XMLExImTools.c XMLParsingTools/XMLExportSettingTools.c XMLParsingTools/XMLExportTools.c XMLParsingTools/XMLFilterTools.c XMLParsingTools/XMLFormatTools.c XMLParsingTools/XMLImportTools.c XMLParsingTools/XMLInterfaceTools.c XMLParsingTools/XMLLevelTools.c XMLParsingTools/XMLPortTools.c XMLParsingTools/XMLProcedureListTools.c XMLParsingTools/XMLProtocolPacketTools.c XMLParsingTools/XMLSpecialPacketTools.c XMLParsingTools/XMLTPInputTools.c XMLParsingTools/XMLTPOutputTools.c XMLParsingTools/XMLTPStepTools.c XMLParsingTools/XMLTPTools.c XMLParsingTools/XMLTools.c main.cpp
@@ -26,17 +24,25 @@ RESOURCES += icons.qrc logos.qrc
 UI_DIR += Forms
 RC_FILE = icon.rc
 
-win32:LIBS += -liconv -lws2_32 -lpthread
-win32:LIBS += -L$$PWD/../libxml2-v2.12.8/win32/bin.mingw -lxml2
-win32:INCLUDEPATH += $$PWD/../libxml2-v2.12.8/include
+contains(CONFIG, spwmk2release) {
+    TARGET = massiva-spwmk2
 
+    DEFINES -= NOT_MK2_DEV
+
+    INCLUDEPATH += "/C/Program Files/STAR-Dundee/STAR-System/inc/star"
+
+    LIBS += "C:/Program Files/STAR-Dundee/STAR-System/lib/x86-64/star-api.lib" "C:/Program Files/STAR-Dundee/STAR-System/lib/x86-64/star_conf_api_brick_mk2.lib" "C:/Program Files/STAR-Dundee/STAR-System/lib/x86-64/star_conf_api_mk2.lib" "C:/Program Files/STAR-Dundee/STAR-System/lib/x86-64/star_conf_api_router.lib"
+}
+
+win32:LIBS += -liconv -lws2_32 -lpthread
+win32:LIBS += -L$$PWD/../libxml2-2.14.3/build -lxml2
+win32:INCLUDEPATH += $$PWD/../libxml2-2.14.3/include
 unix:LIBS += -lxml2
 unix:INCLUDEPATH += /usr/include/libxml2
 
 DEFINES += PLOTS
 CONFIG += qwt
-unix:LIBS += -Wl,-rpath,/usr/local/qwt-6.3.0/lib/ /usr/local/qwt-6.3.0/lib/libqwt.so
-unix:INCLUDEPATH += /usr/local/qwt-6.3.0/include/
-								   
 win32:LIBS += -Wl,-rpath,C:\Qwt-6.3.0\qwt-6.3.0\lib\ C:\Qwt-6.3.0\lib\libqwt.a
-win32:INCLUDEPATH += C:\Qwt-6.3.0\include/
+win32:INCLUDEPATH += C:\Qwt-6.3.0\include
+unix:LIBS += -Wl,-rpath,/usr/local/qwt-6.3.0/lib/ /usr/local/qwt-6.3.0/lib/libqwt.so
+unix:INCLUDEPATH += /usr/local/qwt-6.3.0/include

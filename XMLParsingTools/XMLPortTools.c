@@ -674,7 +674,7 @@ static int ParseTCPSocketPort (const char * portConfigFile,
     {
         return status;
     }
-    /* check if port file is socketCliPort or socketSvrPort */
+    /* check if port file is TCPsocketCliPort or TCPsocketSrvPort */
     if((strncmp((char*)child->name, "TCPsocketCliPort", 16)) &&
             (strncmp((char*)child->name, "TCPsocketSrvPort", 16)) &&
             (strncmp((char*)child->name, "portConfig", 10)))
